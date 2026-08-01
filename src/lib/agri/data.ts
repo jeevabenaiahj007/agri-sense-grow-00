@@ -48,7 +48,7 @@ function seasonFor(month: number, lat: number) {
     "Winter",
   ];
   const idx = lat >= 0 ? month - 1 : (month + 5) % 12;
-  return northern[idx];
+  return northern[idx] ?? "Season";
 }
 
 export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditions> {
@@ -79,7 +79,7 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
 
   const monthlyMap = new Map<string, number>();
   times.forEach((t, i) => {
-    const label = MONTH_SHORT[new Date(t).getMonth()];
+    const label = MONTH_SHORT[new Date(t).getMonth()] ?? "Jan";
     monthlyMap.set(label, (monthlyMap.get(label) ?? 0) + (daily[i] ?? 0));
   });
 

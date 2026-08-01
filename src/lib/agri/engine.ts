@@ -82,7 +82,7 @@ export function scoreCrop(
       label: "Season & planting window",
       score: seasonScore,
       weight: 0.12,
-      detail: `Ideal sowing: ${crop.plantingMonths.map((m) => MONTHS[m - 1].slice(0, 3)).join(", ")}.`,
+      detail: `Ideal sowing: ${crop.plantingMonths.map((m) => (MONTHS[m - 1] ?? "").slice(0, 3)).join(", ")}.`,
     },
     {
       label: "Humidity",
@@ -190,7 +190,7 @@ export function scoreCrop(
         const dist = Math.min(Math.abs(m - month), 12 - Math.abs(m - month));
         return dist < best.dist ? { m, dist } : best;
       },
-      { m: crop.plantingMonths[0], dist: 99 },
+      { m: crop.plantingMonths[0] ?? 1, dist: 99 },
     ).m - 1;
   const harvestIdx = (plantMonthIdx + Math.round(crop.durationDays / 30)) % 12;
 
@@ -230,8 +230,8 @@ export function scoreCrop(
     },
     diseaseRisks,
     fertilizer,
-    plantingMonth: MONTHS[plantMonthIdx],
-    harvestMonth: MONTHS[harvestIdx],
+    plantingMonth: MONTHS[plantMonthIdx] ?? "",
+    harvestMonth: MONTHS[harvestIdx] ?? "",
     advantages,
     disadvantages,
   };
