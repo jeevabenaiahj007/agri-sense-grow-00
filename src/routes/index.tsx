@@ -73,7 +73,9 @@ function Dashboard() {
               <Sprout className="size-6" />
             </span>
             <div>
-              <h1 className="font-display text-2xl font-bold">AgriSense AI</h1>
+              <h1 className="font-display text-2xl font-bold">
+                AgriSense AI — Explainable Crop Recommendations
+              </h1>
               <p className="text-sm opacity-85">
                 Intelligent crop recommendation & precision farming platform
               </p>
