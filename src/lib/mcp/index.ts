@@ -5,6 +5,10 @@ import listCropsTool from "./tools/list-crops";
 import recommendCropsTool from "./tools/recommend-crops";
 import getCropPlanTool from "./tools/get-crop-plan";
 
+// The OAuth issuer must be the direct Supabase auth host: the published
+// runtime URL is a proxy whose discovery document advertises this issuer.
+const projectRef = import.meta.env['VITE_SUPABASE_PROJECT_ID'] ?? "project-ref-unset";
+
 export default defineMcp({
   name: "agriwise-ai",
   title: "AgriWise AI",
