@@ -27,8 +27,10 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://agri-sense-grow-00.lovable.app/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://agri-sense-grow-00.lovable.app/" }],
   }),
   component: Dashboard,
 });
@@ -73,7 +75,9 @@ function Dashboard() {
               <Sprout className="size-6" />
             </span>
             <div>
-              <h1 className="font-display text-2xl font-bold">AgriSense AI</h1>
+              <h1 className="font-display text-2xl font-bold">
+                AgriSense AI — Explainable Crop Recommendations
+              </h1>
               <p className="text-sm opacity-85">
                 Intelligent crop recommendation & precision farming platform
               </p>

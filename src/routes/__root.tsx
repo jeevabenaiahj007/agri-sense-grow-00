@@ -96,6 +96,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "AgriSense AI",
+          url: "https://agri-sense-grow-00.lovable.app",
+          description:
+            "AI-powered crop recommendation and precision farming platform.",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "AgriSense AI",
+          url: "https://agri-sense-grow-00.lovable.app",
+          logo: "https://agri-sense-grow-00.lovable.app/favicon.ico",
+        }),
+      },
+    ],
   }),
 
   shellComponent: RootShell,
