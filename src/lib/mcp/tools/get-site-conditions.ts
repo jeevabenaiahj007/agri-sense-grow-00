@@ -1,6 +1,5 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { z } from "zod";
-import { locationSchema, resolveSite } from "../site";
+import { locationSchema, resolveSite, type LocationInput } from "../site";
 
 export default defineTool({
   name: "get_site_conditions",
@@ -10,7 +9,7 @@ export default defineTool({
   inputSchema: locationSchema,
   annotations: { readOnlyHint: true, openWorldHint: true },
   handler: async (input) => {
-    const { site } = await resolveSite(input as z.infer<z.ZodObject<typeof locationSchema>>);
+    const { site } = await resolveSite(input as LocationInput);
     return {
       content: [{ type: "text", text: JSON.stringify(site, null, 2) }],
       structuredContent: { site },
