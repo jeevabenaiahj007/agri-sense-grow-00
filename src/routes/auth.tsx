@@ -1,7 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +15,7 @@ function safeNext(value: unknown): string {
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s.next) }),
+  validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s['next']) }),
   head: () => ({
     meta: [
       { title: "Sign in · AgriSense AI" },
@@ -39,7 +38,6 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const { next } = Route.useSearch();
-  const navigate = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,21 +71,6 @@ function AuthPage() {
     window.location.href = returnTo;
   }
 
-  async function google() {
-    setBusy(true);
-    setError(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}${returnTo}`,
-    });
-    if (result.error) {
-      setBusy(false);
-      setError(result.error.message);
-      return;
-    }
-    if (result.redirected) return;
-    void navigate({ to: returnTo });
-  }
-
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <Card className="w-full max-w-md">
@@ -98,13 +81,6 @@ function AuthPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button type="button" variant="outline" className="w-full" disabled={busy} onClick={google}>
-            Continue with Google
-          </Button>
-          <div className="relative text-center text-xs text-muted-foreground">
-            <span className="bg-card px-2">or</span>
-            <div className="absolute inset-x-0 top-1/2 -z-10 h-px bg-border" />
-          </div>
           <form className="space-y-4" onSubmit={submit}>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
