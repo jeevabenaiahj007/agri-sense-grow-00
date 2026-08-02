@@ -1,4 +1,4 @@
-import { defineMcp, type AnyToolDefinition } from "@lovable.dev/mcp-js";
+import { defineMcp } from "@lovable.dev/mcp-js";
 import searchPlacesTool from "./tools/search-places";
 import getSiteConditionsTool from "./tools/get-site-conditions";
 import listCropsTool from "./tools/list-crops";
@@ -19,5 +19,5 @@ export default defineMcp({
     listCropsTool,
     recommendCropsTool,
     getCropPlanTool,
-  ] as unknown as AnyToolDefinition[],
+  ] as unknown as Parameters<typeof defineMcp>[0]["tools"],
 });
