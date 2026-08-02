@@ -42,11 +42,13 @@ export const locationSchema = {
   longitude: z.number().optional().describe("Longitude, used instead of location."),
 };
 
-export async function resolvePlace(input: {
-  location?: string;
-  latitude?: number;
-  longitude?: number;
-}): Promise<GeoPlace> {
+export type LocationInput = {
+  location?: string | undefined;
+  latitude?: number | undefined;
+  longitude?: number | undefined;
+};
+
+export async function resolvePlace(input: LocationInput): Promise<GeoPlace> {
   if (typeof input.latitude === "number" && typeof input.longitude === "number") {
     return {
       name: `${input.latitude.toFixed(3)}, ${input.longitude.toFixed(3)}`,
@@ -63,11 +65,7 @@ export async function resolvePlace(input: {
   return first;
 }
 
-export async function resolveSite(input: {
-  location?: string;
-  latitude?: number;
-  longitude?: number;
-}) {
+export async function resolveSite(input: LocationInput) {
   const place = await resolvePlace(input);
   return { place, site: await fetchSiteConditions(place) };
 }
