@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://agri-sense-grow-00.lovable.app/sitemap.xml
