@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "agriwise-ai",
+      "version": "0.1.0",
+      "title": "AgriWise AI"
+    },
+    "tools": [
+      {
+        "name": "search_places",
+        "title": "Search places",
+        "description": "Geocode a place name into candidate locations (name, region, country, latitude, longitude).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Town, city or region name to look up."
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_site_conditions",
+        "title": "Get site conditions",
+        "description": "Fetch live weather, rainfall, air quality, season and climate zone for a farm location.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "location": {
+              "description": "Place name to geocode, e.g. 'Nashik' or 'Fresno, California'.",
+              "type": "string"
+            },
+            "latitude": {
+              "description": "Latitude, used instead of location.",
+              "type": "number"
+            },
+            "longitude": {
+              "description": "Longitude, used instead of location.",
+              "type": "number"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_crops",
+        "title": "List crops",
+        "description": "List every crop in the AgriSense knowledge base with its id, category and key agronomic ranges.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "recommend_crops",
+        "title": "Recommend crops",
+        "description": "Rank the best crops for a location using live climate, soil, season and economics. Returns suitability, confidence, risk, expected yield, profit and the top explaining factors.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "location": {
+              "description": "Place name to geocode, e.g. 'Nashik' or 'Fresno, California'.",
+              "type": "string"
+            },
+            "latitude": {
+              "description": "Latitude, used instead of location.",
+              "type": "number"
+            },
+            "longitude": {
+              "description": "Longitude, used instead of location.",
+              "type": "number"
+            },
+            "soil": {
+              "description": "Optional soil test values; sensible loamy defaults are used for anything omitted.",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "sandy",
+                    "loamy",
+                    "clay",
+                    "silt",
+                    "black",
+                    "red",
+                    "laterite",
+                    "alluvial"
+                  ]
+                },
+                "ph": {
+                  "type": "number"
+                },
+                "nitrogen": {
+                  "type": "number"
+                },
+                "phosphorus": {
+                  "type": "number"
+                },
+                "potassium": {
+                  "type": "number"
+                },
+                "organicMatter": {
+                  "type": "number"
+                },
+                "moisture": {
+                  "type": "number"
+                },
+                "salinity": {
+                  "type": "number"
+                }
+              }
+            },
+            "month": {
+              "description": "Planting month 1-12; defaults to current month.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "limit": {
+              "description": "How many crops to return (default 10).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_crop_plan",
+        "title": "Get crop plan",
+        "description": "Full agronomic plan for one crop at a location: suitability breakdown, disease risks, fertilizer schedule, irrigation plan, rotation advice, economics and pros/cons.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "location": {
+              "description": "Place name to geocode, e.g. 'Nashik' or 'Fresno, California'.",
+              "type": "string"
+            },
+            "latitude": {
+              "description": "Latitude, used instead of location.",
+              "type": "number"
+            },
+            "longitude": {
+              "description": "Longitude, used instead of location.",
+              "type": "number"
+            },
+            "cropId": {
+              "type": "string",
+              "description": "Crop id from recommend_crops or list_crops, e.g. 'rice'."
+            },
+            "soil": {
+              "description": "Optional soil test values; sensible loamy defaults are used for anything omitted.",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "sandy",
+                    "loamy",
+                    "clay",
+                    "silt",
+                    "black",
+                    "red",
+                    "laterite",
+                    "alluvial"
+                  ]
+                },
+                "ph": {
+                  "type": "number"
+                },
+                "nitrogen": {
+                  "type": "number"
+                },
+                "phosphorus": {
+                  "type": "number"
+                },
+                "potassium": {
+                  "type": "number"
+                },
+                "organicMatter": {
+                  "type": "number"
+                },
+                "moisture": {
+                  "type": "number"
+                },
+                "salinity": {
+                  "type": "number"
+                }
+              }
+            },
+            "month": {
+              "description": "Planting month 1-12; defaults to current month.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "cropId"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
