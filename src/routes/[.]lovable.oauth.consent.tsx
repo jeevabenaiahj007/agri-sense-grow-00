@@ -98,7 +98,7 @@ function Consent() {
           )}
           {scopes.length > 0 && (
             <ul className="list-inside list-disc text-sm text-muted-foreground">
-              {scopes.map((s) => (
+              {scopes.map((s: string) => (
                 <li key={s}>
                   {s === "email"
                     ? "Share your email address"
