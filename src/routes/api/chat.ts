@@ -28,57 +28,23 @@ export const Route = createFileRoute("/api/chat")({
           headers: { "Content-Type": "application/json", "Lovable-API-Key": key },
           body: JSON.stringify({
             model: "openai/gpt-5.4-mini",
-            stream: true,
             messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
           }),
         });
 
-        if (!upstream.ok || !upstream.body) {
+        if (!upstream.ok) {
           const detail = await upstream.text().catch(() => "");
           console.error(`AI gateway failed [${upstream.status}]: ${detail}`);
           return new Response(detail || "AI request failed", { status: upstream.status });
         }
 
-        const reader = upstream.body.getReader();
-        const decoder = new TextDecoder();
-        const encoder = new TextEncoder();
-        let buffer = "";
+        const json = (await upstream.json()) as {
+          choices?: { message?: { content?: string } }[];
+        };
+        const text = json.choices?.[0]?.message?.content?.trim() ?? "";
+        if (!text) return new Response("The assistant returned an empty answer.", { status: 502 });
 
-        const stream = new ReadableStream<Uint8Array>({
-          async pull(controller) {
-            const { done, value } = await reader.read();
-            if (done) {
-              controller.close();
-              return;
-            }
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split("\n");
-            buffer = lines.pop() ?? "";
-            for (const line of lines) {
-              const trimmed = line.trim();
-              if (!trimmed.startsWith("data:")) continue;
-              const payload = trimmed.slice(5).trim();
-              if (!payload) continue;
-              if (payload === "[DONE]") {
-                controller.close();
-                void reader.cancel();
-                return;
-              }
-              try {
-                const json = JSON.parse(payload);
-                const delta = json?.choices?.[0]?.delta?.content;
-                if (typeof delta === "string" && delta) controller.enqueue(encoder.encode(delta));
-              } catch {
-                // ignore partial/keep-alive frames
-              }
-            }
-          },
-          cancel() {
-            void reader.cancel();
-          },
-        });
-
-        return new Response(stream, {
+        return new Response(text, {
           headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" },
         });
       },
