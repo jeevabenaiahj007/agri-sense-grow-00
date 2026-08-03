@@ -1,6 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { streamText, type ModelMessage } from "ai";
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 
 const SYSTEM_PROMPT = `You are AgriSense AI Assistant, a friendly agronomy helper inside the AgriSense AI web app.
 You answer farmer questions about crop selection, soil health (pH, N-P-K, texture), irrigation, fertilizer schedules,
@@ -17,33 +15,67 @@ export const Route = createFileRoute("/api/chat")({
     handlers: {
       POST: async ({ request }) => {
         const body = (await request.json()) as Incoming;
-        const messages = Array.isArray(body.messages) ? body.messages : null;
-        if (!messages || messages.length === 0) {
-          return new Response("Messages are required", { status: 400 });
-        }
+        const history = (Array.isArray(body.messages) ? body.messages : [])
+          .filter((m) => typeof m?.content === "string" && m.content.trim())
+          .slice(-20);
+        if (history.length === 0) return new Response("Messages are required", { status: 400 });
 
         const key = process.env["LOVABLE_API_KEY"];
         if (!key) return new Response("AI is not configured", { status: 500 });
 
-        const gateway = createLovableAiGatewayProvider(key);
+        const upstream = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Lovable-API-Key": key },
+          body: JSON.stringify({
+            model: "openai/gpt-5.4-mini",
+            stream: true,
+            messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
+          }),
+        });
 
-        try {
-          const result = streamText({
-            model: gateway("openai/gpt-5.4-mini"),
-            messages: [
-              { role: "system", content: SYSTEM_PROMPT },
-              ...messages
-                .filter((m) => typeof m.content === "string" && m.content.trim())
-                .slice(-20)
-                .map((m) => ({ role: m.role, content: m.content }) as ModelMessage),
-            ],
-          });
-          return result.toTextStreamResponse();
-        } catch (error) {
-          const message = error instanceof Error ? error.message : "AI request failed";
-          console.error("chat error:", message);
-          return new Response(message, { status: 502 });
+        if (!upstream.ok || !upstream.body) {
+          const detail = await upstream.text().catch(() => "");
+          console.error(`AI gateway failed [${upstream.status}]: ${detail}`);
+          return new Response(detail || "AI request failed", { status: upstream.status });
         }
+
+        const reader = upstream.body.getReader();
+        const decoder = new TextDecoder();
+        const encoder = new TextEncoder();
+        let buffer = "";
+
+        const stream = new ReadableStream<Uint8Array>({
+          async pull(controller) {
+            const { done, value } = await reader.read();
+            if (done) {
+              controller.close();
+              return;
+            }
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+            for (const line of lines) {
+              const trimmed = line.trim();
+              if (!trimmed.startsWith("data:")) continue;
+              const payload = trimmed.slice(5).trim();
+              if (!payload || payload === "[DONE]") continue;
+              try {
+                const json = JSON.parse(payload);
+                const delta = json?.choices?.[0]?.delta?.content;
+                if (typeof delta === "string" && delta) controller.enqueue(encoder.encode(delta));
+              } catch {
+                // ignore partial/keep-alive frames
+              }
+            }
+          },
+          cancel() {
+            void reader.cancel();
+          },
+        });
+
+        return new Response(stream, {
+          headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" },
+        });
       },
     },
   },
