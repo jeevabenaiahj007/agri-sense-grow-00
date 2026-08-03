@@ -58,7 +58,12 @@ export const Route = createFileRoute("/api/chat")({
               const trimmed = line.trim();
               if (!trimmed.startsWith("data:")) continue;
               const payload = trimmed.slice(5).trim();
-              if (!payload || payload === "[DONE]") continue;
+              if (!payload) continue;
+              if (payload === "[DONE]") {
+                controller.close();
+                void reader.cancel();
+                return;
+              }
               try {
                 const json = JSON.parse(payload);
                 const delta = json?.choices?.[0]?.delta?.content;
