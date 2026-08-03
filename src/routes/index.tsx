@@ -173,9 +173,13 @@ function Dashboard() {
           New to this?{" "}
           <Link to="/precision-agriculture" className="underline underline-offset-4">
             Read our guide to precision agriculture basics
+          </Link>{" "}
+          ·{" "}
+          <Link to="/connect" className="underline underline-offset-4">
+            Connect an AI assistant
           </Link>
-          .
         </p>
+
         <p className="mt-2">
           Weather, climate and air-quality data from Open-Meteo. Agronomic ranges follow FAO-56 crop
           water guidance. Recommendations are advisory — validate with a local extension officer.
