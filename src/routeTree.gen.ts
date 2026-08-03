@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as PrecisionAgricultureRouteImport } from './routes/precision-agriculture'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -31,6 +32,11 @@ const AuthRoute = AuthRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrecisionAgricultureRoute = PrecisionAgricultureRouteImport.update({
+  id: '/precision-agriculture',
+  path: '/precision-agriculture',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/mcp': typeof McpRoute
+  '/precision-agriculture': typeof PrecisionAgricultureRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/mcp': typeof McpRoute
+  '/precision-agriculture': typeof PrecisionAgricultureRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/mcp': typeof McpRoute
+  '/precision-agriculture': typeof PrecisionAgricultureRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/mcp'
+    | '/precision-agriculture'
     | '/sitemap.xml'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/mcp'
+    | '/precision-agriculture'
     | '/sitemap.xml'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/mcp'
+    | '/precision-agriculture'
     | '/sitemap.xml'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   McpRoute: typeof McpRoute
+  PrecisionAgricultureRoute: typeof PrecisionAgricultureRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precision-agriculture': {
+      id: '/precision-agriculture'
+      path: '/precision-agriculture'
+      fullPath: '/precision-agriculture'
+      preLoaderRoute: typeof PrecisionAgricultureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   McpRoute: McpRoute,
+  PrecisionAgricultureRoute: PrecisionAgricultureRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
