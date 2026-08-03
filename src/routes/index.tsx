@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Leaf, Loader2, Moon, Sprout, Sun } from "lucide-react";
@@ -169,9 +169,19 @@ function Dashboard() {
       </main>
 
       <footer className="border-t px-5 py-6 text-center text-xs text-muted-foreground">
-        Weather, climate and air-quality data from Open-Meteo. Agronomic ranges follow FAO-56 crop
-        water guidance. Recommendations are advisory — validate with a local extension officer.
+        <p>
+          New to this?{" "}
+          <Link to="/precision-agriculture" className="underline underline-offset-4">
+            Read our guide to precision agriculture basics
+          </Link>
+          .
+        </p>
+        <p className="mt-2">
+          Weather, climate and air-quality data from Open-Meteo. Agronomic ranges follow FAO-56 crop
+          water guidance. Recommendations are advisory — validate with a local extension officer.
+        </p>
       </footer>
+
 
       <CropDetail rec={selected} site={site ?? null} onOpenChange={(o) => !o && setSelected(null)} />
     </div>
