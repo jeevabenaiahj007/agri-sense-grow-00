@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { irrigationPlan, rotationPlan } from "@/lib/agri/engine";
+import { cropProfile } from "@/lib/agri/crop-profiles";
+
 import type { Recommendation, SiteConditions } from "@/lib/agri/types";
 
 interface Props {
