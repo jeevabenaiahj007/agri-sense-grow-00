@@ -1,4 +1,5 @@
 import { CROPS, MONTHS } from "./crops";
+import { cropProfile, seasonOfMonth } from "./crop-profiles";
 import type { Crop, Factor, Recommendation, SiteConditions, SoilProfile } from "./types";
 
 /** Triangular fitness: 100 inside the range, tapering outside it. */
@@ -8,6 +9,26 @@ function rangeScore(value: number, [min, max]: [number, number], tolerance = 0.3
   const distance = value < min ? min - value : value - max;
   const allowed = span * tolerance;
   return Math.max(0, Math.round(100 - (distance / allowed) * 100));
+}
+
+/**
+ * Trapezoidal fitness: 100 inside the optimal band, sloping down to 60 at the
+ * absolute limits and 0 beyond them. Used when a crop profile supplies an
+ * optimum as well as a tolerable range.
+ */
+function optimalScore(value: number, [min, max]: [number, number], [optMin, optMax]: [number, number]) {
+  if (value >= optMin && value <= optMax) return 100;
+  if (value < min || value > max) {
+    const overshoot = value < min ? min - value : value - max;
+    return Math.max(0, Math.round(60 - (overshoot / Math.max(max - min, 1)) * 120));
+  }
+  const span = value < optMin ? Math.max(optMin - min, 0.1) : Math.max(max - optMax, 0.1);
+  const distance = value < optMin ? optMin - value : value - optMax;
+  return Math.round(100 - (distance / span) * 40);
+}
+
+function toleranceFactor(level: "low" | "medium" | "high") {
+  return level === "high" ? 1.25 : level === "medium" ? 1 : 0.75;
 }
 
 function nutrientScore(available: number, required: number) {
@@ -20,104 +41,176 @@ function clamp(n: number, min = 0, max = 100) {
   return Math.min(max, Math.max(min, n));
 }
 
+/**
+ * Scoring weights (percent) as configured for the recommendation engine.
+ * They sum to 100; advisory signals carry zero weight and are shown for
+ * explanation only.
+ */
+export const SCORING_WEIGHTS = {
+  temperature: 20,
+  rainfall: 20,
+  soilPh: 15,
+  nutrients: 15,
+  soilTexture: 10,
+  humidity: 5,
+  season: 5,
+  waterAvailability: 5,
+  salinity: 5,
+} as const;
+
 export function scoreCrop(
   crop: Crop,
   site: SiteConditions,
   soil: SoilProfile,
   month: number,
 ): Recommendation {
-  const tempScore = rangeScore(site.temperature, crop.tempRange);
+  const p = cropProfile(crop.id);
+
+  const tempScore = p
+    ? optimalScore(site.temperature, crop.tempRange, p.tempOptimal)
+    : rangeScore(site.temperature, crop.tempRange);
   const humidityScore = rangeScore(site.humidity, crop.humidityRange);
-  const rainScore = rangeScore(site.rainfallAnnual, crop.rainRange, 0.5);
-  const phScore = rangeScore(soil.ph, crop.phRange, 0.5);
+  const rainScore = p
+    ? optimalScore(site.rainfallAnnual, crop.rainRange, [
+        p.rainfallOptimal * 0.85,
+        p.rainfallOptimal * 1.15,
+      ])
+    : rangeScore(site.rainfallAnnual, crop.rainRange, 0.5);
+  const phScore = p
+    ? optimalScore(soil.ph, crop.phRange, [p.phOptimal - 0.3, p.phOptimal + 0.3])
+    : rangeScore(soil.ph, crop.phRange, 0.5);
   const soilTypeScore = crop.soils.includes(soil.type) ? 100 : 42;
   const nutrient =
     (nutrientScore(soil.nitrogen, crop.n) +
       nutrientScore(soil.phosphorus, crop.p) +
       nutrientScore(soil.potassium, crop.k)) /
     3;
-  const organicScore = clamp(35 + soil.organicMatter * 22);
-  const salinityScore = clamp(100 - Math.max(0, soil.salinity - 1) * 35);
-  const seasonScore = crop.plantingMonths.includes(month)
-    ? 100
-    : crop.plantingMonths.some((m) => Math.abs(m - month) === 1 || Math.abs(m - month) === 11)
-      ? 72
-      : 38;
+  const organicScore = p
+    ? clamp(Math.round(55 + (soil.organicMatter - p.organicMatterReq) * 30))
+    : clamp(35 + soil.organicMatter * 22);
+  const salinityScore = p
+    ? clamp(Math.round(100 - Math.max(0, soil.salinity - p.ecTolerance * 0.5) * 30))
+    : clamp(100 - Math.max(0, soil.salinity - 1) * 35);
+
+  const currentSeason = seasonOfMonth(month);
+  const seasonScore = p
+    ? p.seasons[currentSeason]
+      ? 100
+      : crop.plantingMonths.includes(month)
+        ? 90
+        : 40
+    : crop.plantingMonths.includes(month)
+      ? 100
+      : crop.plantingMonths.some((m) => Math.abs(m - month) === 1 || Math.abs(m - month) === 11)
+        ? 72
+        : 38;
+
+  // Water availability: rain + stored soil moisture against seasonal demand,
+  // adjusted for how well the crop tolerates drought.
+  const seasonalSupply =
+    (site.rainfallAnnual * crop.durationDays) / 365 + site.soilMoisture * 400;
+  const supplyRatio =
+    (seasonalSupply / Math.max(crop.waterMmPerSeason, 1)) *
+    (p ? toleranceFactor(p.droughtTolerance) : 1);
+  const waterAvailabilityScore = clamp(Math.round(Math.min(supplyRatio, 1.4) * 78));
+
   const sunScore = clamp(40 + site.sunshineHours * 9);
   const pollutionScore = clamp(105 - site.aqi / 2.2 - site.pm25 / 3);
   const windScore = clamp(100 - Math.max(0, site.windSpeed - 22) * 3.5);
 
+  const w = SCORING_WEIGHTS;
   const factors: Factor[] = [
     {
       label: "Temperature match",
       score: tempScore,
-      weight: 0.17,
-      detail: `${site.temperature.toFixed(1)}°C now vs ideal ${crop.tempRange[0]}–${crop.tempRange[1]}°C.`,
+      weight: w.temperature / 100,
+      detail: p
+        ? `${site.temperature.toFixed(1)}°C now · optimum ${p.tempOptimal[0]}–${p.tempOptimal[1]}°C, tolerable ${crop.tempRange[0]}–${crop.tempRange[1]}°C.`
+        : `${site.temperature.toFixed(1)}°C now vs ideal ${crop.tempRange[0]}–${crop.tempRange[1]}°C.`,
     },
     {
-      label: "Rainfall & water",
+      label: "Rainfall & precipitation",
       score: rainScore,
-      weight: 0.15,
-      detail: `~${Math.round(site.rainfallAnnual)} mm/yr available vs ${crop.rainRange[0]}–${crop.rainRange[1]} mm needed.`,
-    },
-    {
-      label: "Soil type",
-      score: soilTypeScore,
-      weight: 0.13,
-      detail: `${soil.type} soil ${crop.soils.includes(soil.type) ? "is preferred by" : "is sub-optimal for"} ${crop.name}.`,
+      weight: w.rainfall / 100,
+      detail: p
+        ? `~${Math.round(site.rainfallAnnual)} mm/yr available · optimum ${p.rainfallOptimal} mm, range ${crop.rainRange[0]}–${crop.rainRange[1]} mm.`
+        : `~${Math.round(site.rainfallAnnual)} mm/yr available vs ${crop.rainRange[0]}–${crop.rainRange[1]} mm needed.`,
     },
     {
       label: "Soil pH",
       score: phScore,
-      weight: 0.1,
-      detail: `pH ${soil.ph.toFixed(1)} vs optimum ${crop.phRange[0]}–${crop.phRange[1]}.`,
+      weight: w.soilPh / 100,
+      detail: p
+        ? `pH ${soil.ph.toFixed(1)} · optimum ${p.phOptimal.toFixed(1)}, tolerable ${crop.phRange[0]}–${crop.phRange[1]}.`
+        : `pH ${soil.ph.toFixed(1)} vs optimum ${crop.phRange[0]}–${crop.phRange[1]}.`,
     },
     {
       label: "Nutrient supply (NPK)",
       score: Math.round(nutrient),
-      weight: 0.11,
+      weight: w.nutrients / 100,
       detail: `Soil N/P/K ${soil.nitrogen}/${soil.phosphorus}/${soil.potassium} vs demand ${crop.n}/${crop.p}/${crop.k} kg/ha.`,
     },
     {
-      label: "Season & planting window",
-      score: seasonScore,
-      weight: 0.12,
-      detail: `Ideal sowing: ${crop.plantingMonths.map((m) => (MONTHS[m - 1] ?? "").slice(0, 3)).join(", ")}.`,
+      label: "Soil texture",
+      score: soilTypeScore,
+      weight: w.soilTexture / 100,
+      detail: p
+        ? `${soil.type} soil vs preferred "${p.soilTexturePref}".`
+        : `${soil.type} soil ${crop.soils.includes(soil.type) ? "is preferred by" : "is sub-optimal for"} ${crop.name}.`,
     },
     {
       label: "Humidity",
       score: humidityScore,
-      weight: 0.07,
+      weight: w.humidity / 100,
       detail: `${site.humidity.toFixed(0)}% RH vs ideal ${crop.humidityRange[0]}–${crop.humidityRange[1]}%.`,
     },
     {
-      label: "Sunlight",
+      label: "Season & planting window",
+      score: seasonScore,
+      weight: w.season / 100,
+      detail: p
+        ? `${currentSeason} season · this crop suits ${(["kharif", "rabi", "zaid"] as const).filter((s) => p.seasons[s]).join(", ") || "no standard"} season. Sowing ${p.sowingWindow}.`
+        : `Ideal sowing: ${crop.plantingMonths.map((m) => (MONTHS[m - 1] ?? "").slice(0, 3)).join(", ")}.`,
+    },
+    {
+      label: "Water availability",
+      score: waterAvailabilityScore,
+      weight: w.waterAvailability / 100,
+      detail: `~${Math.round(seasonalSupply)} mm supply in-season vs ${crop.waterMmPerSeason} mm demand (${p?.waterRequirement ?? "medium"} water crop, ${p?.droughtTolerance ?? "medium"} drought tolerance).`,
+    },
+    {
+      label: "Salinity (EC)",
+      score: salinityScore,
+      weight: w.salinity / 100,
+      detail: p
+        ? `EC ${soil.salinity.toFixed(1)} dS/m vs crop threshold ${p.ecTolerance} dS/m (${p.salinityTolerance} tolerance).`
+        : `EC ${soil.salinity.toFixed(1)} dS/m.`,
+    },
+    // Advisory signals: explained to the farmer but not weighted in the score.
+    {
+      label: "Sunlight (advisory)",
       score: sunScore,
-      weight: 0.05,
+      weight: 0,
       detail: `${site.sunshineHours.toFixed(1)} h/day of sunshine at this location.`,
     },
     {
-      label: "Organic matter",
+      label: "Organic matter (advisory)",
       score: organicScore,
-      weight: 0.04,
-      detail: `${soil.organicMatter.toFixed(1)}% organic carbon in topsoil.`,
+      weight: 0,
+      detail: p
+        ? `${soil.organicMatter.toFixed(1)}% organic carbon vs ${p.organicMatterReq}% preferred.`
+        : `${soil.organicMatter.toFixed(1)}% organic carbon in topsoil.`,
     },
     {
-      label: "Salinity",
-      score: salinityScore,
-      weight: 0.03,
-      detail: `EC ${soil.salinity.toFixed(1)} dS/m.`,
-    },
-    {
-      label: "Air quality",
+      label: "Air quality (advisory)",
       score: pollutionScore,
-      weight: 0.02,
+      weight: 0,
       detail: `AQI ${Math.round(site.aqi)}, PM2.5 ${site.pm25.toFixed(0)} µg/m³.`,
     },
     {
-      label: "Wind exposure",
+      label: "Wind exposure (advisory)",
       score: windScore,
-      weight: 0.01,
+      weight: 0,
       detail: `${site.windSpeed.toFixed(0)} km/h surface wind.`,
     },
   ];
@@ -131,6 +224,7 @@ export function scoreCrop(
   const mean = factors.reduce((s, f) => s + f.score, 0) / factors.length;
   const variance = factors.reduce((s, f) => s + (f.score - mean) ** 2, 0) / factors.length;
   const confidence = clamp(Math.round(96 - Math.sqrt(variance) * 1.15), 45, 97);
+
 
   const diseasePressure = clamp(
     (site.humidity > 75 ? 30 : site.humidity > 60 ? 18 : 8) +

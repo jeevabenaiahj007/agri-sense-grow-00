@@ -1,4 +1,15 @@
-import type { SiteConditions } from "./types";
+import type { ConfidenceLevel, DataSourceType, Provenance, SiteConditions } from "./types";
+
+function prov(
+  source: DataSourceType,
+  provider: string,
+  confidence: ConfidenceLevel,
+  observedAt: string,
+  resolution: string,
+): Provenance {
+  return { source, provider, confidence, observedAt, resolution };
+}
+
 
 export interface GeoPlace {
   name: string;
@@ -86,6 +97,7 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
   // Historical climate normals refine the annual rainfall estimate; fall back to
   // extrapolating the observed 92-day window if the climate model is slow/unavailable.
   let rainfallAnnual = (rain92 / 92) * 365;
+  let rainfallFromNormals = false;
   try {
     const cRes = await fetch(climateUrl);
     if (cRes.ok) {
@@ -94,6 +106,7 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
       const valid = arr.filter((v) => typeof v === "number");
       if (valid.length > 3000) {
         rainfallAnnual = (valid.reduce((s, v) => s + v, 0) / valid.length) * 365;
+        rainfallFromNormals = true;
       }
     }
   } catch {
@@ -104,6 +117,73 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
   const ac = a.current ?? {};
   const month = new Date().getMonth() + 1;
   const temperature = cur.temperature_2m ?? 25;
+
+  const observedAt: string = cur.time ? new Date(cur.time).toISOString() : new Date().toISOString();
+  const airObservedAt: string = a.current?.time
+    ? new Date(a.current.time).toISOString()
+    : observedAt;
+  const airOk = aRes.ok && ac.us_aqi != null;
+
+  const live = (key: string) =>
+    cur[key] != null
+      ? prov("real-time", "Open-Meteo forecast API", "high", observedAt, "~11 km grid")
+      : prov("estimated", "Regional default", "low", observedAt, "regional average");
+
+  const provenance: Record<string, Provenance> = {
+    temperature: live("temperature_2m"),
+    humidity: live("relative_humidity_2m"),
+    windSpeed: live("wind_speed_10m"),
+    pressure: live("surface_pressure"),
+    cloudCover: live("cloud_cover"),
+    uvIndex: live("uv_index"),
+    soilMoisture: cur.soil_moisture_0_to_1cm != null
+      ? prov("modeled", "Open-Meteo land-surface model", "medium", observedAt, "~11 km grid")
+      : prov("estimated", "Regional default", "low", observedAt, "regional average"),
+    soilTemperature: cur.soil_temperature_0cm != null
+      ? prov("modeled", "Open-Meteo land-surface model", "medium", observedAt, "~11 km grid")
+      : prov("estimated", "Regional default", "low", observedAt, "regional average"),
+    rainfall30d: prov(
+      "api-derived",
+      "Open-Meteo daily precipitation (last 30 days)",
+      "high",
+      observedAt,
+      "~11 km grid",
+    ),
+    rainfallAnnual: rainfallFromNormals
+      ? prov(
+          "historical",
+          "Open-Meteo climate normals 1991–2020",
+          "high",
+          "1991-01-01T00:00:00.000Z",
+          "~25 km grid",
+        )
+      : prov(
+          "estimated",
+          "Extrapolated from observed 92-day rainfall",
+          "low",
+          observedAt,
+          "~11 km grid",
+        ),
+    monthlyRain: prov(
+      "api-derived",
+      "Open-Meteo daily precipitation (last 90 days)",
+      "high",
+      observedAt,
+      "~11 km grid",
+    ),
+    sunshineHours: sunshine.length
+      ? prov("api-derived", "Open-Meteo sunshine duration", "high", observedAt, "~11 km grid")
+      : prov("estimated", "Global default 7 h/day", "low", observedAt, "global"),
+    elevation:
+      w.elevation != null
+        ? prov("api-derived", "Copernicus DEM via Open-Meteo", "high", observedAt, "90 m DEM")
+        : prov("unavailable", "No elevation data", "unknown", observedAt, "n/a"),
+    airQuality: airOk
+      ? prov("real-time", "Open-Meteo air quality (CAMS)", "medium", airObservedAt, "~11 km grid")
+      : prov("unavailable", "Air quality service unreachable — defaults shown", "unknown", airObservedAt, "n/a"),
+    season: prov("modeled", "Latitude-based cropping calendar", "high", observedAt, "regional"),
+    climateZone: prov("modeled", "Köppen-style classification from live data", "medium", observedAt, "site"),
+  };
 
   return {
     name: [place.name, place.admin1, place.country].filter(Boolean).join(", "),
@@ -134,5 +214,7 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
       month: m,
       rain: Math.round(monthlyMap.get(m) ?? 0),
     })),
+    provenance,
   };
+
 }
