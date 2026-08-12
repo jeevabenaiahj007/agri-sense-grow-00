@@ -72,7 +72,7 @@
       {
         "name": "list_crops",
         "title": "List crops",
-        "description": "List every crop in the AgriSense knowledge base with its id, category and key agronomic ranges.",
+        "description": "List every crop in the AgriSense knowledge base with its id, category, key agronomic ranges and extended profile (scientific name, seasons, tolerances, sowing/harvest windows).",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
