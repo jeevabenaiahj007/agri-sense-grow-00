@@ -38,21 +38,24 @@ function timeAgo(iso: string) {
 /** Small provenance chip: where a reading came from and how much to trust it. */
 export function DataBadge({ prov }: { prov: Provenance }) {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <span
-          className={`inline-flex cursor-help items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${CONFIDENCE_TONE[prov.confidence]}`}
-        >
-          {SOURCE_LABEL[prov.source]}
-        </span>
-      </TooltipTrigger>
-      <TooltipContent className="max-w-56 text-xs">
-        <p className="font-semibold">{prov.provider}</p>
-        <p>Source: {SOURCE_LABEL[prov.source]}</p>
-        <p>Confidence: {prov.confidence}</p>
-        <p>Observed: {timeAgo(prov.observedAt)}</p>
-        <p>Resolution: {prov.resolution}</p>
-      </TooltipContent>
-    </Tooltip>
+    <TooltipProvider delayDuration={100}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span
+            className={`inline-flex cursor-help items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${CONFIDENCE_TONE[prov.confidence]}`}
+          >
+            {SOURCE_LABEL[prov.source]}
+          </span>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-56 space-y-0.5 text-xs">
+          <p className="font-semibold">{prov.provider}</p>
+          <p>Source: {SOURCE_LABEL[prov.source]}</p>
+          <p>Confidence: {prov.confidence}</p>
+          <p>Observed: {timeAgo(prov.observedAt)}</p>
+          <p>Resolution: {prov.resolution}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
+
 }
