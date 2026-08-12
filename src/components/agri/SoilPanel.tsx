@@ -81,6 +81,10 @@ function Row({
 
 export function SoilPanel({ soil, onChange }: Props) {
   const set = (patch: Partial<SoilProfile>) => onChange({ ...soil, ...patch });
+  const isDefault = (Object.keys(DEFAULT_SOIL) as (keyof SoilProfile)[]).every(
+    (k) => soil[k] === DEFAULT_SOIL[k],
+  );
+
 
   return (
     <Card className="shadow-soft">
