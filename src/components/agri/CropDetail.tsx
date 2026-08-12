@@ -33,6 +33,7 @@ export function CropDetail({ rec, site, onOpenChange }: Props) {
   if (!rec || !site) return null;
   const irrigation = irrigationPlan(rec, site);
   const rotation = rotationPlan(rec);
+  const profile = cropProfile(rec.crop.id);
   const radarData = rec.factors.slice(0, 8).map((f) => ({ factor: f.label, score: f.score }));
 
   return (
@@ -44,7 +45,55 @@ export function CropDetail({ rec, site, onOpenChange }: Props) {
             <Badge variant="secondary">{rec.suitability}% suitable</Badge>
             <Badge variant="outline">{rec.confidence}% confidence</Badge>
           </DialogTitle>
+          {profile && (
+            <p className="text-sm italic text-muted-foreground">{profile.scientificName}</p>
+          )}
         </DialogHeader>
+
+        {profile && (
+          <div className="grid gap-2 rounded-xl border bg-muted/40 p-3 text-xs sm:grid-cols-3">
+            <p>
+              <span className="text-muted-foreground">Season: </span>
+              {(["kharif", "rabi", "zaid"] as const)
+                .filter((s) => profile.seasons[s])
+                .map((s) => s[0]?.toUpperCase() + s.slice(1))
+                .join(", ") || "—"}
+            </p>
+            <p>
+              <span className="text-muted-foreground">Sowing: </span>
+              {profile.sowingWindow}
+            </p>
+            <p>
+              <span className="text-muted-foreground">Harvest: </span>
+              {profile.harvestWindow}
+            </p>
+            <p>
+              <span className="text-muted-foreground">Preferred soil: </span>
+              {profile.soilTexturePref}
+            </p>
+            <p>
+              <span className="text-muted-foreground">Water need: </span>
+              {profile.waterRequirement}
+            </p>
+            <p>
+              <span className="text-muted-foreground">Salinity limit: </span>
+              {profile.ecTolerance} dS/m
+            </p>
+            <p>
+              <span className="text-muted-foreground">Drought tolerance: </span>
+              {profile.droughtTolerance}
+            </p>
+            <p>
+              <span className="text-muted-foreground">Salinity tolerance: </span>
+              {profile.salinityTolerance}
+            </p>
+            <p>
+              <span className="text-muted-foreground">Waterlogging tolerance: </span>
+              {profile.waterloggingTolerance}
+            </p>
+          </div>
+        )}
+
 
         <Tabs defaultValue="why">
           <TabsList className="flex w-full flex-wrap">
