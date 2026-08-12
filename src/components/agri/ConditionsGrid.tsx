@@ -166,13 +166,17 @@ export function ConditionsGrid({ site }: { site: SiteConditions }) {
 
         <Card className="shadow-soft lg:col-span-2">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center justify-between text-base">
-              Air quality
+            <CardTitle className="flex items-center justify-between gap-2 text-base">
+              <span className="flex items-center gap-2">
+                Air quality
+                {pv['airQuality'] && <DataBadge prov={pv['airQuality']} />}
+              </span>
               <Badge className={band.tone} variant="secondary">
                 AQI {Math.round(site.aqi)} · {band.label}
               </Badge>
             </CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-3">
             {[
               { label: "PM2.5", value: site.pm25, max: 120, unit: "µg/m³" },
