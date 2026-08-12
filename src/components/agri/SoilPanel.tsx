@@ -10,7 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DataBadge } from "./DataBadge";
 import type { SoilProfile, SoilType } from "@/lib/agri/types";
+
 
 export const DEFAULT_SOIL: SoilProfile = {
   type: "loamy",
