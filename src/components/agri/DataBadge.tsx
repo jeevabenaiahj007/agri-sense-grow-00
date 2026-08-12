@@ -1,4 +1,10 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import type { Provenance } from "@/lib/agri/types";
 
 const SOURCE_LABEL: Record<Provenance["source"], string> = {
