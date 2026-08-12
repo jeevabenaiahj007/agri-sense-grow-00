@@ -85,11 +85,23 @@ export function SoilPanel({ soil, onChange }: Props) {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <FlaskConical className="size-4 text-primary" /> Soil profile
+          <DataBadge
+            prov={{
+              source: isDefault ? "estimated" : "user-entered",
+              provider: isDefault
+                ? "Typical medium-fertility field defaults"
+                : "Values you entered from your soil health card",
+              confidence: isDefault ? "low" : "high",
+              observedAt: new Date().toISOString(),
+              resolution: isDefault ? "regional average" : "your field",
+            }}
+          />
         </CardTitle>
         <Button variant="ghost" size="sm" onClick={() => onChange(DEFAULT_SOIL)}>
           <RotateCcw className="size-3.5" /> Reset
         </Button>
       </CardHeader>
+
       <CardContent className="space-y-4">
         <div className="space-y-1.5">
           <Label className="text-xs text-muted-foreground">Soil type</Label>
