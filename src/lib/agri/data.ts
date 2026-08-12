@@ -1,4 +1,15 @@
-import type { SiteConditions } from "./types";
+import type { ConfidenceLevel, DataSourceType, Provenance, SiteConditions } from "./types";
+
+function prov(
+  source: DataSourceType,
+  provider: string,
+  confidence: ConfidenceLevel,
+  observedAt: string,
+  resolution: string,
+): Provenance {
+  return { source, provider, confidence, observedAt, resolution };
+}
+
 
 export interface GeoPlace {
   name: string;
