@@ -34,7 +34,7 @@ function Metric({
   label: string;
   value: string;
   sub?: string;
-  prov?: Provenance;
+  prov?: Provenance | undefined;
 }) {
   return (
     <div className="rounded-xl border bg-card p-3.5 shadow-soft">
