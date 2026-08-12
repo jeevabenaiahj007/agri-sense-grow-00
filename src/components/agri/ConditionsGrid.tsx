@@ -20,24 +20,30 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import type { SiteConditions } from "@/lib/agri/types";
+import { DataBadge } from "./DataBadge";
+import type { Provenance, SiteConditions } from "@/lib/agri/types";
 
 function Metric({
   icon: Icon,
   label,
   value,
   sub,
+  prov,
 }: {
   icon: React.ElementType;
   label: string;
   value: string;
   sub?: string;
+  prov?: Provenance;
 }) {
   return (
     <div className="rounded-xl border bg-card p-3.5 shadow-soft">
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Icon className="size-3.5 text-primary" />
-        {label}
+      <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+        <span className="flex items-center gap-2">
+          <Icon className="size-3.5 text-primary" />
+          {label}
+        </span>
+        {prov && <DataBadge prov={prov} />}
       </div>
       <p className="mt-1.5 font-display text-xl font-semibold">{value}</p>
       {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
@@ -54,6 +60,7 @@ function aqiBand(aqi: number) {
 
 export function ConditionsGrid({ site }: { site: SiteConditions }) {
   const band = aqiBand(site.aqi);
+  const pv = site.provenance ?? {};
   const pollutionNote =
     site.aqi <= 50
       ? "Clean air — no measurable impact on photosynthesis or crop quality."
@@ -65,31 +72,69 @@ export function ConditionsGrid({ site }: { site: SiteConditions }) {
 
   return (
     <div className="space-y-4">
+      <p className="text-xs text-muted-foreground">
+        Every reading is tagged with its source and confidence — hover a tag to see the provider,
+        observation time and geographic resolution.
+      </p>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Metric
           icon={Thermometer}
           label="Temperature"
           value={`${site.temperature.toFixed(1)}°C`}
           sub={`Soil ${site.soilTemperature.toFixed(1)}°C`}
+          prov={pv['temperature']}
         />
-        <Metric icon={Droplets} label="Humidity" value={`${site.humidity.toFixed(0)}%`} sub={`Cloud ${site.cloudCover.toFixed(0)}%`} />
+        <Metric
+          icon={Droplets}
+          label="Humidity"
+          value={`${site.humidity.toFixed(0)}%`}
+          sub={`Cloud ${site.cloudCover.toFixed(0)}%`}
+          prov={pv['humidity']}
+        />
         <Metric
           icon={CloudRain}
           label="Rainfall"
           value={`${Math.round(site.rainfallAnnual)} mm/yr`}
           sub={`${Math.round(site.rainfall30d)} mm last 30 days`}
+          prov={pv['rainfallAnnual']}
         />
-        <Metric icon={Wind} label="Wind" value={`${site.windSpeed.toFixed(0)} km/h`} sub={`Pressure ${site.pressure.toFixed(0)} hPa`} />
-        <Metric icon={Sun} label="Sunshine" value={`${site.sunshineHours.toFixed(1)} h/day`} sub={`UV index ${site.uvIndex.toFixed(1)}`} />
+        <Metric
+          icon={Wind}
+          label="Wind"
+          value={`${site.windSpeed.toFixed(0)} km/h`}
+          sub={`Pressure ${site.pressure.toFixed(0)} hPa`}
+          prov={pv['windSpeed']}
+        />
+        <Metric
+          icon={Sun}
+          label="Sunshine"
+          value={`${site.sunshineHours.toFixed(1)} h/day`}
+          sub={`UV index ${site.uvIndex.toFixed(1)}`}
+          prov={pv['sunshineHours']}
+        />
         <Metric
           icon={Leaf}
           label="Soil moisture"
           value={`${(site.soilMoisture * 100).toFixed(0)}%`}
           sub="Volumetric, 0–1 cm"
+          prov={pv['soilMoisture']}
         />
-        <Metric icon={Mountain} label="Elevation" value={`${Math.round(site.elevation)} m`} sub={site.climateZone} />
-        <Metric icon={Gauge} label="Season" value={site.season} sub={`Lat ${site.latitude.toFixed(2)}°`} />
+        <Metric
+          icon={Mountain}
+          label="Elevation"
+          value={`${Math.round(site.elevation)} m`}
+          sub={site.climateZone}
+          prov={pv['elevation']}
+        />
+        <Metric
+          icon={Gauge}
+          label="Season"
+          value={site.season}
+          sub={`Lat ${site.latitude.toFixed(2)}°`}
+          prov={pv['season']}
+        />
       </div>
+
 
       <div className="grid gap-4 lg:grid-cols-5">
         <Card className="shadow-soft lg:col-span-3">
