@@ -8,6 +8,48 @@ export type SoilType =
   | "laterite"
   | "alluvial";
 
+/** Where a data point came from — shown to the user for every reading. */
+export type DataSourceType =
+  | "real-time"
+  | "api-derived"
+  | "historical"
+  | "modeled"
+  | "estimated"
+  | "user-entered"
+  | "unavailable";
+
+export type ConfidenceLevel = "high" | "medium" | "low" | "unknown";
+
+export interface Provenance {
+  source: DataSourceType;
+  /** Human-readable provider, e.g. "Open-Meteo forecast API". */
+  provider: string;
+  confidence: ConfidenceLevel;
+  /** ISO timestamp of the observation. */
+  observedAt: string;
+  /** Geographic resolution of the reading, e.g. "~11 km grid". */
+  resolution: string;
+}
+
+export type ToleranceLevel = "low" | "medium" | "high";
+
+export interface CropProfile {
+  scientificName: string;
+  seasons: { kharif: boolean; rabi: boolean; zaid: boolean };
+  tempOptimal: [number, number];
+  rainfallOptimal: number;
+  phOptimal: number;
+  organicMatterReq: number;
+  ecTolerance: number;
+  soilTexturePref: string;
+  waterRequirement: "low" | "medium" | "high";
+  sowingWindow: string;
+  harvestWindow: string;
+  droughtTolerance: ToleranceLevel;
+  salinityTolerance: ToleranceLevel;
+  waterloggingTolerance: ToleranceLevel;
+}
+
 export interface SoilProfile {
   type: SoilType;
   ph: number;
@@ -18,6 +60,7 @@ export interface SoilProfile {
   moisture: number; // %
   salinity: number; // dS/m
 }
+
 
 export interface SiteConditions {
   name: string;
