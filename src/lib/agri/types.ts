@@ -88,6 +88,9 @@ export interface SiteConditions {
   ozone: number;
   co: number;
   monthlyRain: { month: string; rain: number }[];
+  /** Per-metric data provenance, keyed by metric id (e.g. "temperature"). */
+  provenance: Record<string, Provenance>;
+
 }
 
 export interface Crop {
