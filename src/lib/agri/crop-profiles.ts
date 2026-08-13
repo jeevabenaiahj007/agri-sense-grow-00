@@ -265,7 +265,10 @@ export const CROP_PROFILES: Record<string, CropProfile> = {
 };
 
 export function cropProfile(id: string): CropProfile | undefined {
-  return CROP_PROFILES[id];
+  const override = loadOverrides()[id];
+  const base = CROP_PROFILES[id];
+  if (override) return { ...base, ...override };
+  return base;
 }
 
 /** Season a planting month falls into, Indian cropping calendar. */
