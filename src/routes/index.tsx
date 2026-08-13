@@ -177,6 +177,10 @@ function Dashboard() {
           ·{" "}
           <Link to="/connect" className="underline underline-offset-4">
             Connect an AI assistant
+          </Link>{" "}
+          ·{" "}
+          <Link to="/crop-import" className="underline underline-offset-4">
+            Bulk import crop profiles
           </Link>
         </p>
 

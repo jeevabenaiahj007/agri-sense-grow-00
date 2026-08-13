@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ConnectRouteImport } from './routes/connect'
+import { Route as CropImportRouteImport } from './routes/crop-import'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PrecisionAgricultureRouteImport } from './routes/precision-agriculture'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -34,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
 const ConnectRoute = ConnectRouteImport.update({
   id: '/connect',
   path: '/connect',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CropImportRoute = CropImportRouteImport.update({
+  id: '/crop-import',
+  path: '/crop-import',
   getParentRoute: () => rootRouteImport,
 } as any)
 const McpRoute = McpRouteImport.update({
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/connect': typeof ConnectRoute
+  '/crop-import': typeof CropImportRoute
   '/mcp': typeof McpRoute
   '/precision-agriculture': typeof PrecisionAgricultureRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/connect': typeof ConnectRoute
+  '/crop-import': typeof CropImportRoute
   '/mcp': typeof McpRoute
   '/precision-agriculture': typeof PrecisionAgricultureRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/connect': typeof ConnectRoute
+  '/crop-import': typeof CropImportRoute
   '/mcp': typeof McpRoute
   '/precision-agriculture': typeof PrecisionAgricultureRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/connect'
+    | '/crop-import'
     | '/mcp'
     | '/precision-agriculture'
     | '/sitemap.xml'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/connect'
+    | '/crop-import'
     | '/mcp'
     | '/precision-agriculture'
     | '/sitemap.xml'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/connect'
+    | '/crop-import'
     | '/mcp'
     | '/precision-agriculture'
     | '/sitemap.xml'
@@ -166,6 +178,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   ConnectRoute: typeof ConnectRoute
+  CropImportRoute: typeof CropImportRoute
   McpRoute: typeof McpRoute
   PrecisionAgricultureRoute: typeof PrecisionAgricultureRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -197,6 +210,13 @@ declare module '@tanstack/react-router' {
       path: '/connect'
       fullPath: '/connect'
       preLoaderRoute: typeof ConnectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crop-import': {
+      id: '/crop-import'
+      path: '/crop-import'
+      fullPath: '/crop-import'
+      preLoaderRoute: typeof CropImportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mcp': {
@@ -262,6 +282,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   ConnectRoute: ConnectRoute,
+  CropImportRoute: CropImportRoute,
   McpRoute: McpRoute,
   PrecisionAgricultureRoute: PrecisionAgricultureRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
