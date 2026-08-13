@@ -1,4 +1,5 @@
 import type { CropProfile } from "./types";
+import { loadOverrides } from "./profile-import";
 
 /**
  * Extended agronomic profile per crop: optimal (not just tolerable) ranges,
