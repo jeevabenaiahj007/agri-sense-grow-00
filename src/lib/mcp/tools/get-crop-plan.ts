@@ -22,16 +22,19 @@ export default defineTool({
     );
     if (!crop) {
       return {
-        content: [{ type: "text", text: `Unknown crop "${input.cropId}". Use list_crops for valid ids.` }],
+        content: [
+          { type: "text", text: `Unknown crop "${input.cropId}". Use list_crops for valid ids.` },
+        ],
         isError: true,
       };
     }
 
     const { site } = await resolveSite(input as LocationInput);
     const soil = resolveSoil(input.soil);
-    const month = input.month && input.month >= 1 && input.month <= 12
-      ? input.month
-      : new Date().getMonth() + 1;
+    const month =
+      input.month && input.month >= 1 && input.month <= 12
+        ? input.month
+        : new Date().getMonth() + 1;
 
     const rec = scoreCrop(crop, site, soil, month);
     const plan = {
@@ -57,7 +60,11 @@ export default defineTool({
       irrigation: irrigationPlan(rec, site),
       rotation: rotationPlan(rec),
       sustainability: rec.sustainability,
-      calendar: { plantingMonth: rec.plantingMonth, harvestMonth: rec.harvestMonth, durationDays: rec.crop.durationDays },
+      calendar: {
+        plantingMonth: rec.plantingMonth,
+        harvestMonth: rec.harvestMonth,
+        durationDays: rec.crop.durationDays,
+      },
       advantages: rec.advantages,
       disadvantages: rec.disadvantages,
     };

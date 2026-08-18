@@ -5,9 +5,7 @@
   "auth": {
     "type": "oauth",
     "issuer": "https://cbeazwjggruqulplzzmy.supabase.co/auth/v1",
-    "accepted_audiences": [
-      "authenticated"
-    ]
+    "accepted_audiences": ["authenticated"]
   },
   "mcp": {
     "server": {
@@ -35,9 +33,7 @@
               "description": "Town, city or region name to look up."
             }
           },
-          "required": [
-            "query"
-          ]
+          "required": ["query"]
         },
         "outputSchema": null
       },
@@ -115,16 +111,7 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": [
-                    "sandy",
-                    "loamy",
-                    "clay",
-                    "silt",
-                    "black",
-                    "red",
-                    "laterite",
-                    "alluvial"
-                  ]
+                  "enum": ["sandy", "loamy", "clay", "silt", "black", "red", "laterite", "alluvial"]
                 },
                 "ph": {
                   "type": "number"
@@ -199,16 +186,7 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": [
-                    "sandy",
-                    "loamy",
-                    "clay",
-                    "silt",
-                    "black",
-                    "red",
-                    "laterite",
-                    "alluvial"
-                  ]
+                  "enum": ["sandy", "loamy", "clay", "silt", "black", "red", "laterite", "alluvial"]
                 },
                 "ph": {
                   "type": "number"
@@ -240,9 +218,7 @@
               "maximum": 9007199254740991
             }
           },
-          "required": [
-            "cropId"
-          ]
+          "required": ["cropId"]
         },
         "outputSchema": null
       }

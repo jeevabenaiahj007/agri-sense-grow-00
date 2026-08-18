@@ -18,9 +18,10 @@ export default defineTool({
   handler: async (input) => {
     const { site } = await resolveSite(input as LocationInput);
     const soil = resolveSoil(input.soil);
-    const month = input.month && input.month >= 1 && input.month <= 12
-      ? input.month
-      : new Date().getMonth() + 1;
+    const month =
+      input.month && input.month >= 1 && input.month <= 12
+        ? input.month
+        : new Date().getMonth() + 1;
     const limit = Math.min(Math.max(input.limit ?? 10, 1), 25);
 
     const results = recommendCrops(site, soil, month)
@@ -39,7 +40,9 @@ export default defineTool({
         plantingMonth: r.plantingMonth,
         harvestMonth: r.harvestMonth,
         sustainability: r.sustainability,
-        topFactors: r.factors.slice(0, 4).map((f) => ({ label: f.label, score: f.score, detail: f.detail })),
+        topFactors: r.factors
+          .slice(0, 4)
+          .map((f) => ({ label: f.label, score: f.score, detail: f.detail })),
       }));
 
     return {
@@ -47,7 +50,14 @@ export default defineTool({
         {
           type: "text",
           text: JSON.stringify(
-            { location: site.name, season: site.season, climateZone: site.climateZone, month, soil, results },
+            {
+              location: site.name,
+              season: site.season,
+              climateZone: site.climateZone,
+              month,
+              soil,
+              results,
+            },
             null,
             2,
           ),

@@ -16,7 +16,11 @@ function rangeScore(value: number, [min, max]: [number, number], tolerance = 0.3
  * absolute limits and 0 beyond them. Used when a crop profile supplies an
  * optimum as well as a tolerable range.
  */
-function optimalScore(value: number, [min, max]: [number, number], [optMin, optMax]: [number, number]) {
+function optimalScore(
+  value: number,
+  [min, max]: [number, number],
+  [optMin, optMax]: [number, number],
+) {
   if (value >= optMin && value <= optMax) return 100;
   if (value < min || value > max) {
     const overshoot = value < min ? min - value : value - max;
@@ -107,8 +111,7 @@ export function scoreCrop(
 
   // Water availability: rain + stored soil moisture against seasonal demand,
   // adjusted for how well the crop tolerates drought.
-  const seasonalSupply =
-    (site.rainfallAnnual * crop.durationDays) / 365 + site.soilMoisture * 400;
+  const seasonalSupply = (site.rainfallAnnual * crop.durationDays) / 365 + site.soilMoisture * 400;
   const supplyRatio =
     (seasonalSupply / Math.max(crop.waterMmPerSeason, 1)) *
     (p ? toleranceFactor(p.droughtTolerance) : 1);
@@ -225,13 +228,14 @@ export function scoreCrop(
   const variance = factors.reduce((s, f) => s + (f.score - mean) ** 2, 0) / factors.length;
   const confidence = clamp(Math.round(96 - Math.sqrt(variance) * 1.15), 45, 97);
 
-
   const diseasePressure = clamp(
     (site.humidity > 75 ? 30 : site.humidity > 60 ? 18 : 8) +
       (100 - crop.diseaseResistance) * 0.5 +
       (site.rainfall30d > 200 ? 12 : 0),
   );
-  const risk = clamp(Math.round(diseasePressure * 0.5 + (100 - suitability) * 0.4 + crop.difficulty * 3));
+  const risk = clamp(
+    Math.round(diseasePressure * 0.5 + (100 - suitability) * 0.4 + crop.difficulty * 3),
+  );
 
   const yieldFactor = 0.45 + (suitability / 100) * 0.75;
   const expectedYield = +(crop.yieldTonPerHa * yieldFactor).toFixed(2);
@@ -294,13 +298,23 @@ export function scoreCrop(
       : `Strong market demand score of ${crop.marketDemand}/100.`,
     `Water requirement of ${crop.waterMmPerSeason} mm is ${crop.waterMmPerSeason < 600 ? "low" : crop.waterMmPerSeason < 1200 ? "moderate" : "high"} for this agro-climate.`,
     `Field duration of ${crop.durationDays} days ${crop.durationDays < 100 ? "allows a second crop in the same year" : "fits a single main season"}.`,
-    crop.exportDemand > 70 ? `Export demand index ${crop.exportDemand}/100 opens premium buyers.` : `Reliable local mandi offtake.`,
+    crop.exportDemand > 70
+      ? `Export demand index ${crop.exportDemand}/100 opens premium buyers.`
+      : `Reliable local mandi offtake.`,
   ];
   const disadvantages = [
-    crop.difficulty >= 4 ? "Management-intensive: needs regular scouting and skilled labour." : "Modest management burden.",
-    crop.diseaseResistance < 55 ? "Below-average disease resistance in humid spells." : "Reasonably disease tolerant.",
-    crop.costPerHa > 1200 ? `High establishment cost (~${crop.costPerHa} per hectare).` : `Input cost is manageable (~${crop.costPerHa}/ha).`,
-    ...(soilTypeScore < 100 ? [`${soil.type} soil is not the preferred texture — expect a yield penalty.`] : []),
+    crop.difficulty >= 4
+      ? "Management-intensive: needs regular scouting and skilled labour."
+      : "Modest management burden.",
+    crop.diseaseResistance < 55
+      ? "Below-average disease resistance in humid spells."
+      : "Reasonably disease tolerant.",
+    crop.costPerHa > 1200
+      ? `High establishment cost (~${crop.costPerHa} per hectare).`
+      : `Input cost is manageable (~${crop.costPerHa}/ha).`,
+    ...(soilTypeScore < 100
+      ? [`${soil.type} soil is not the preferred texture — expect a yield penalty.`]
+      : []),
   ];
 
   return {
@@ -332,7 +346,9 @@ export function scoreCrop(
 }
 
 export function recommendCrops(site: SiteConditions, soil: SoilProfile, month: number) {
-  return CROPS.map((c) => scoreCrop(c, site, soil, month)).sort((a, b) => b.suitability - a.suitability);
+  return CROPS.map((c) => scoreCrop(c, site, soil, month)).sort(
+    (a, b) => b.suitability - a.suitability,
+  );
 }
 
 export function rotationPlan(rec: Recommendation) {

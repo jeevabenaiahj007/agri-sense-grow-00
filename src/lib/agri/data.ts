@@ -10,7 +10,6 @@ function prov(
   return { source, provider, confidence, observedAt, resolution };
 }
 
-
 export interface GeoPlace {
   name: string;
   admin1?: string;
@@ -19,7 +18,20 @@ export interface GeoPlace {
   longitude: number;
 }
 
-const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_SHORT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 export async function searchPlaces(query: string): Promise<GeoPlace[]> {
   if (query.trim().length < 2) return [];
@@ -37,7 +49,8 @@ export async function reverseName(lat: number, lon: number): Promise<string> {
 
 function climateZone(lat: number, temp: number, rain: number) {
   const abs = Math.abs(lat);
-  if (abs < 23.5) return rain > 1500 ? "Tropical humid" : rain > 700 ? "Tropical wet-dry" : "Tropical semi-arid";
+  if (abs < 23.5)
+    return rain > 1500 ? "Tropical humid" : rain > 700 ? "Tropical wet-dry" : "Tropical semi-arid";
   if (abs < 35) return rain > 900 ? "Subtropical humid" : "Subtropical dry";
   if (abs < 55) return temp < 8 ? "Temperate cold" : "Temperate";
   return "Boreal / polar";
@@ -136,12 +149,14 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
     pressure: live("surface_pressure"),
     cloudCover: live("cloud_cover"),
     uvIndex: live("uv_index"),
-    soilMoisture: cur.soil_moisture_0_to_1cm != null
-      ? prov("modeled", "Open-Meteo land-surface model", "medium", observedAt, "~11 km grid")
-      : prov("estimated", "Regional default", "low", observedAt, "regional average"),
-    soilTemperature: cur.soil_temperature_0cm != null
-      ? prov("modeled", "Open-Meteo land-surface model", "medium", observedAt, "~11 km grid")
-      : prov("estimated", "Regional default", "low", observedAt, "regional average"),
+    soilMoisture:
+      cur.soil_moisture_0_to_1cm != null
+        ? prov("modeled", "Open-Meteo land-surface model", "medium", observedAt, "~11 km grid")
+        : prov("estimated", "Regional default", "low", observedAt, "regional average"),
+    soilTemperature:
+      cur.soil_temperature_0cm != null
+        ? prov("modeled", "Open-Meteo land-surface model", "medium", observedAt, "~11 km grid")
+        : prov("estimated", "Regional default", "low", observedAt, "regional average"),
     rainfall30d: prov(
       "api-derived",
       "Open-Meteo daily precipitation (last 30 days)",
@@ -180,9 +195,21 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
         : prov("unavailable", "No elevation data", "unknown", observedAt, "n/a"),
     airQuality: airOk
       ? prov("real-time", "Open-Meteo air quality (CAMS)", "medium", airObservedAt, "~11 km grid")
-      : prov("unavailable", "Air quality service unreachable — defaults shown", "unknown", airObservedAt, "n/a"),
+      : prov(
+          "unavailable",
+          "Air quality service unreachable — defaults shown",
+          "unknown",
+          airObservedAt,
+          "n/a",
+        ),
     season: prov("modeled", "Latitude-based cropping calendar", "high", observedAt, "regional"),
-    climateZone: prov("modeled", "Köppen-style classification from live data", "medium", observedAt, "site"),
+    climateZone: prov(
+      "modeled",
+      "Köppen-style classification from live data",
+      "medium",
+      observedAt,
+      "site",
+    ),
   };
 
   return {
@@ -216,5 +243,4 @@ export async function fetchSiteConditions(place: GeoPlace): Promise<SiteConditio
     })),
     provenance,
   };
-
 }

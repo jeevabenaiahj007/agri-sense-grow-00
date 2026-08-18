@@ -28,8 +28,7 @@ export function ChatWidget() {
   const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
-    const SR =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) return;
     setSpeechSupported(true);
     const rec = new SR();

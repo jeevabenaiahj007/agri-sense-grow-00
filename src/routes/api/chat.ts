@@ -39,7 +39,10 @@ async function askGemini(key: string, history: Msg[]) {
     candidates?: { content?: { parts?: { text?: string }[] } }[];
   };
   const text =
-    json.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("").trim() ?? "";
+    json.candidates?.[0]?.content?.parts
+      ?.map((p) => p.text ?? "")
+      .join("")
+      .trim() ?? "";
   return { ok: true as const, text };
 }
 

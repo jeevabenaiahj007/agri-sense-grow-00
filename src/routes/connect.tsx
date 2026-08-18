@@ -90,7 +90,8 @@ function ConnectPage() {
               Connect an AI assistant to {APP_NAME}
             </h1>
             <p className="text-sm opacity-85">
-              Let ChatGPT, Claude or another assistant look up conditions and recommend crops for you
+              Let ChatGPT, Claude or another assistant look up conditions and recommend crops for
+              you
             </p>
           </div>
         </div>
@@ -144,8 +145,8 @@ function ConnectPage() {
                     >
                       ChatGPT's Apps settings
                     </a>{" "}
-                    and turn on Developer mode, reading the risk notice shown there. If you can't see
-                    it, ask a ChatGPT admin to enable it.
+                    and turn on Developer mode, reading the risk notice shown there. If you can't
+                    see it, ask a ChatGPT admin to enable it.
                   </>,
                   <>
                     Open the{" "}
@@ -164,8 +165,8 @@ function ConnectPage() {
                     into the URL field.
                   </>,
                   <>
-                    Review the details, tick “I understand and want to continue” — ChatGPT shows this
-                    warning for every custom server — then click <strong>Create</strong>.
+                    Review the details, tick “I understand and want to continue” — ChatGPT shows
+                    this warning for every custom server — then click <strong>Create</strong>.
                   </>,
                   <>
                     Enable {APP_NAME} from the chat composer, then ask ChatGPT to use it, e.g. “What
@@ -229,9 +230,7 @@ function ConnectPage() {
                 items={[
                   <>Open your assistant's MCP server or custom connector settings.</>,
                   <>Create a new remote MCP server connection.</>,
-                  <>
-                    Name it {APP_NAME} and paste the address from above.
-                  </>,
+                  <>Name it {APP_NAME} and paste the address from above.</>,
                   <>Finish any sign-in or authorisation prompts.</>,
                   <>Enable the connection, then ask the assistant to use {APP_NAME}.</>,
                 ]}

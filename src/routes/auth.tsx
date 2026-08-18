@@ -15,7 +15,7 @@ function safeNext(value: unknown): string {
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s['next']) }),
+  validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s["next"]) }),
   head: () => ({
     meta: [
       { title: "Sign in · AgriSense AI" },
@@ -27,7 +27,8 @@ export const Route = createFileRoute("/auth")({
       { property: "og:title", content: "Sign in · AgriSense AI" },
       {
         property: "og:description",
-        content: "Sign in to AgriSense AI to connect assistants and access crop recommendation tools.",
+        content:
+          "Sign in to AgriSense AI to connect assistants and access crop recommendation tools.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -75,7 +76,9 @@ function AuthPage() {
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{mode === "signin" ? "Sign in to AgriSense AI" : "Create your account"}</CardTitle>
+          <CardTitle>
+            {mode === "signin" ? "Sign in to AgriSense AI" : "Create your account"}
+          </CardTitle>
           <CardDescription>
             Your account authorizes assistants and integrations to use AgriSense tools as you.
           </CardDescription>

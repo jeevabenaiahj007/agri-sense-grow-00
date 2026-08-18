@@ -96,7 +96,6 @@ export function CropDetail({ rec, site, onOpenChange }: Props) {
           </div>
         )}
 
-
         <Tabs defaultValue="why">
           <TabsList className="flex w-full flex-wrap">
             <TabsTrigger value="why">Why this crop</TabsTrigger>
@@ -248,7 +247,9 @@ export function CropDetail({ rec, site, onOpenChange }: Props) {
                 <Stat label="Monthly" value={`${irrigation.monthly} m³/ha`} />
               </div>
               <p className="mt-3 text-sm text-muted-foreground">
-                Recommended method: <span className="font-medium text-foreground">{irrigation.method}</span>. {irrigation.note}.
+                Recommended method:{" "}
+                <span className="font-medium text-foreground">{irrigation.method}</span>.{" "}
+                {irrigation.note}.
               </p>
             </div>
             <div className="rounded-xl border p-4">

@@ -1,8 +1,7 @@
 /** Translation dictionaries for AgriSense AI (12 Indian-subcontinent languages). */
 
 export type LanguageCode =
-  | "en" | "hi" | "ta" | "te" | "bn" | "mr"
-  | "kn" | "ml" | "gu" | "or" | "pa" | "ur";
+  "en" | "hi" | "ta" | "te" | "bn" | "mr" | "kn" | "ml" | "gu" | "or" | "pa" | "ur";
 
 export interface Dictionary {
   app: { name: string; tagline: string };
@@ -106,7 +105,13 @@ const en: Dictionary = {
     error: "Sorry, I couldn't process your request. Please try again.",
     title: "AgriSense Assistant",
   },
-  common: { loading: "Loading…", error: "Error occurred", retry: "Retry", viewAll: "View all", back: "Back" },
+  common: {
+    loading: "Loading…",
+    error: "Error occurred",
+    retry: "Retry",
+    viewAll: "View all",
+    back: "Back",
+  },
 };
 
 const hi: Dictionary = {
@@ -159,7 +164,13 @@ const hi: Dictionary = {
     error: "क्षमा करें, मैं आपका अनुरोध संसाधित नहीं कर सका। कृपया पुनः प्रयास करें।",
     title: "एग्रीसेंस सहायक",
   },
-  common: { loading: "लोड हो रहा है…", error: "त्रुटि हुई", retry: "पुनः प्रयास", viewAll: "सभी देखें", back: "वापस" },
+  common: {
+    loading: "लोड हो रहा है…",
+    error: "त्रुटि हुई",
+    retry: "पुनः प्रयास",
+    viewAll: "सभी देखें",
+    back: "वापस",
+  },
 };
 
 const ta: Dictionary = {
@@ -212,7 +223,13 @@ const ta: Dictionary = {
     error: "மன்னிக்கவும், உங்கள் கோரிக்கையை செயல்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
     title: "அக்ரிசென்ஸ் உதவியாளர்",
   },
-  common: { loading: "ஏற்றுகிறது…", error: "பிழை ஏற்பட்டது", retry: "மீண்டும் முயற்சி", viewAll: "அனைத்தையும் பார்", back: "பின்" },
+  common: {
+    loading: "ஏற்றுகிறது…",
+    error: "பிழை ஏற்பட்டது",
+    retry: "மீண்டும் முயற்சி",
+    viewAll: "அனைத்தையும் பார்",
+    back: "பின்",
+  },
 };
 
 const te: Dictionary = {
@@ -265,7 +282,13 @@ const te: Dictionary = {
     error: "క్షమించండి, మీ అభ్యర్థనను ప్రాసెస్ చేయలేకపోయాను. మళ్లీ ప్రయత్నించండి.",
     title: "అగ్రిసెన్స్ సహాయకుడు",
   },
-  common: { loading: "లోడ్ అవుతోంది…", error: "లోపం సంభవించింది", retry: "మళ్లీ ప్రయత్నించండి", viewAll: "అన్నీ చూడండి", back: "వెనుకకు" },
+  common: {
+    loading: "లోడ్ అవుతోంది…",
+    error: "లోపం సంభవించింది",
+    retry: "మళ్లీ ప్రయత్నించండి",
+    viewAll: "అన్నీ చూడండి",
+    back: "వెనుకకు",
+  },
 };
 
 const bn: Dictionary = {
@@ -318,7 +341,13 @@ const bn: Dictionary = {
     error: "দুঃখিত, আপনার অনুরোধ প্রক্রিয়া করা যায়নি। আবার চেষ্টা করুন।",
     title: "অ্যাগ্রিসেন্স সহায়ক",
   },
-  common: { loading: "লোড হচ্ছে…", error: "ত্রুটি ঘটেছে", retry: "আবার চেষ্টা", viewAll: "সব দেখুন", back: "ফিরে" },
+  common: {
+    loading: "লোড হচ্ছে…",
+    error: "ত্রুটি ঘটেছে",
+    retry: "আবার চেষ্টা",
+    viewAll: "সব দেখুন",
+    back: "ফিরে",
+  },
 };
 
 const mr: Dictionary = {
@@ -361,8 +390,7 @@ const mr: Dictionary = {
     applicationProcess: "अर्ज प्रक्रिया",
     requiredDocuments: "आवश्यक कागदपत्रे",
     officialWebsite: "अधिकृत संकेतस्थळ",
-    disclaimer:
-      "हे प्राथमिक पात्रता मार्गदर्शन आहे. कृपया अधिकृत शासकीय संकेतस्थळावर तपशील तपासा.",
+    disclaimer: "हे प्राथमिक पात्रता मार्गदर्शन आहे. कृपया अधिकृत शासकीय संकेतस्थळावर तपशील तपासा.",
   },
   ai: {
     placeholder: "पिके, शेती, बाजारभावाबद्दल विचारा…",
@@ -371,7 +399,13 @@ const mr: Dictionary = {
     error: "क्षमस्व, तुमची विनंती पूर्ण करता आली नाही. पुन्हा प्रयत्न करा.",
     title: "अ‍ॅग्रीसेन्स सहाय्यक",
   },
-  common: { loading: "लोड होत आहे…", error: "त्रुटी आली", retry: "पुन्हा प्रयत्न", viewAll: "सर्व पहा", back: "मागे" },
+  common: {
+    loading: "लोड होत आहे…",
+    error: "त्रुटी आली",
+    retry: "पुन्हा प्रयत्न",
+    viewAll: "सर्व पहा",
+    back: "मागे",
+  },
 };
 
 const kn: Dictionary = {
@@ -414,8 +448,7 @@ const kn: Dictionary = {
     applicationProcess: "ಅರ್ಜಿ ಪ್ರಕ್ರಿಯೆ",
     requiredDocuments: "ಅಗತ್ಯ ದಾಖಲೆಗಳು",
     officialWebsite: "ಅಧಿಕೃತ ಜಾಲತಾಣ",
-    disclaimer:
-      "ಇದು ಪ್ರಾಥಮಿಕ ಅರ್ಹತಾ ಮಾರ್ಗದರ್ಶಿ. ದಯವಿಟ್ಟು ಅಧಿಕೃತ ಜಾಲತಾಣದಲ್ಲಿ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+    disclaimer: "ಇದು ಪ್ರಾಥಮಿಕ ಅರ್ಹತಾ ಮಾರ್ಗದರ್ಶಿ. ದಯವಿಟ್ಟು ಅಧಿಕೃತ ಜಾಲತಾಣದಲ್ಲಿ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
   },
   ai: {
     placeholder: "ಬೆಳೆ, ಕೃಷಿ, ಮಾರುಕಟ್ಟೆ ದರಗಳ ಬಗ್ಗೆ ಕೇಳಿ…",
@@ -424,7 +457,13 @@ const kn: Dictionary = {
     error: "ಕ್ಷಮಿಸಿ, ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
     title: "ಅಗ್ರಿಸೆನ್ಸ್ ಸಹಾಯಕ",
   },
-  common: { loading: "ಲೋಡ್ ಆಗುತ್ತಿದೆ…", error: "ದೋಷ ಸಂಭವಿಸಿದೆ", retry: "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ", viewAll: "ಎಲ್ಲಾ ನೋಡಿ", back: "ಹಿಂದೆ" },
+  common: {
+    loading: "ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+    error: "ದೋಷ ಸಂಭವಿಸಿದೆ",
+    retry: "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+    viewAll: "ಎಲ್ಲಾ ನೋಡಿ",
+    back: "ಹಿಂದೆ",
+  },
 };
 
 const ml: Dictionary = {
@@ -467,8 +506,7 @@ const ml: Dictionary = {
     applicationProcess: "അപേക്ഷാ നടപടി",
     requiredDocuments: "ആവശ്യമായ രേഖകൾ",
     officialWebsite: "ഔദ്യോഗിക വെബ്സൈറ്റ്",
-    disclaimer:
-      "ഇത് പ്രാഥമിക യോഗ്യതാ സൂചനയാണ്. ഔദ്യോഗിക വെബ്സൈറ്റിൽ വിവരങ്ങൾ പരിശോധിക്കുക.",
+    disclaimer: "ഇത് പ്രാഥമിക യോഗ്യതാ സൂചനയാണ്. ഔദ്യോഗിക വെബ്സൈറ്റിൽ വിവരങ്ങൾ പരിശോധിക്കുക.",
   },
   ai: {
     placeholder: "വിളകൾ, കൃഷി, വിപണി വില എന്നിവയെക്കുറിച്ച് ചോദിക്കൂ…",
@@ -477,7 +515,13 @@ const ml: Dictionary = {
     error: "ക്ഷമിക്കണം, അഭ്യർത്ഥന പ്രോസസ് ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക.",
     title: "അഗ്രിസെൻസ് സഹായി",
   },
-  common: { loading: "ലോഡ് ചെയ്യുന്നു…", error: "പിശക് സംഭവിച്ചു", retry: "വീണ്ടും ശ്രമിക്കുക", viewAll: "എല്ലാം കാണുക", back: "തിരികെ" },
+  common: {
+    loading: "ലോഡ് ചെയ്യുന്നു…",
+    error: "പിശക് സംഭവിച്ചു",
+    retry: "വീണ്ടും ശ്രമിക്കുക",
+    viewAll: "എല്ലാം കാണുക",
+    back: "തിരികെ",
+  },
 };
 
 const gu: Dictionary = {
@@ -520,8 +564,7 @@ const gu: Dictionary = {
     applicationProcess: "અરજી પ્રક્રિયા",
     requiredDocuments: "જરૂરી દસ્તાવેજો",
     officialWebsite: "સત્તાવાર વેબસાઇટ",
-    disclaimer:
-      "આ પ્રાથમિક પાત્રતા માર્ગદર્શન છે. કૃપા કરીને સત્તાવાર વેબસાઇટ પર વિગતો ચકાસો.",
+    disclaimer: "આ પ્રાથમિક પાત્રતા માર્ગદર્શન છે. કૃપા કરીને સત્તાવાર વેબસાઇટ પર વિગતો ચકાસો.",
   },
   ai: {
     placeholder: "પાક, ખેતી, બજાર ભાવ વિશે પૂછો…",
@@ -530,7 +573,13 @@ const gu: Dictionary = {
     error: "માફ કરશો, તમારી વિનંતી પ્રક્રિયા થઈ શકી નથી. ફરી પ્રયાસ કરો.",
     title: "એગ્રીસેન્સ સહાયક",
   },
-  common: { loading: "લોડ થઈ રહ્યું છે…", error: "ભૂલ થઈ", retry: "ફરી પ્રયાસ", viewAll: "બધું જુઓ", back: "પાછળ" },
+  common: {
+    loading: "લોડ થઈ રહ્યું છે…",
+    error: "ભૂલ થઈ",
+    retry: "ફરી પ્રયાસ",
+    viewAll: "બધું જુઓ",
+    back: "પાછળ",
+  },
 };
 
 const or: Dictionary = {
@@ -573,8 +622,7 @@ const or: Dictionary = {
     applicationProcess: "ଆବେଦନ ପ୍ରକ୍ରିୟା",
     requiredDocuments: "ଆବଶ୍ୟକ ଦଲିଲ",
     officialWebsite: "ସରକାରୀ ୱେବସାଇଟ",
-    disclaimer:
-      "ଏହା ପ୍ରାଥମିକ ଯୋଗ୍ୟତା ସୂଚନା। ଦୟାକରି ସରକାରୀ ୱେବସାଇଟରେ ବିବରଣୀ ଯାଞ୍ଚ କରନ୍ତୁ।",
+    disclaimer: "ଏହା ପ୍ରାଥମିକ ଯୋଗ୍ୟତା ସୂଚନା। ଦୟାକରି ସରକାରୀ ୱେବସାଇଟରେ ବିବରଣୀ ଯାଞ୍ଚ କରନ୍ତୁ।",
   },
   ai: {
     placeholder: "ଫସଲ, ଚାଷ, ବଜାର ଦର ବିଷୟରେ ପଚାରନ୍ତୁ…",
@@ -583,7 +631,13 @@ const or: Dictionary = {
     error: "ଦୁଃଖିତ, ଆପଣଙ୍କ ଅନୁରୋଧ ପ୍ରକ୍ରିୟା କରାଯାଇପାରିଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
     title: "ଆଗ୍ରିସେନ୍ସ ସହାୟକ",
   },
-  common: { loading: "ଲୋଡ ହେଉଛି…", error: "ତ୍ରୁଟି ଘଟିଛି", retry: "ପୁଣି ଚେଷ୍ଟା", viewAll: "ସବୁ ଦେଖନ୍ତୁ", back: "ପଛକୁ" },
+  common: {
+    loading: "ଲୋଡ ହେଉଛି…",
+    error: "ତ୍ରୁଟି ଘଟିଛି",
+    retry: "ପୁଣି ଚେଷ୍ଟା",
+    viewAll: "ସବୁ ଦେଖନ୍ତୁ",
+    back: "ପଛକୁ",
+  },
 };
 
 const pa: Dictionary = {
@@ -626,8 +680,7 @@ const pa: Dictionary = {
     applicationProcess: "ਅਰਜ਼ੀ ਪ੍ਰਕਿਰਿਆ",
     requiredDocuments: "ਲੋੜੀਂਦੇ ਦਸਤਾਵੇਜ਼",
     officialWebsite: "ਸਰਕਾਰੀ ਵੈੱਬਸਾਈਟ",
-    disclaimer:
-      "ਇਹ ਮੁੱਢਲੀ ਯੋਗਤਾ ਜਾਣਕਾਰੀ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸਰਕਾਰੀ ਵੈੱਬਸਾਈਟ 'ਤੇ ਵੇਰਵੇ ਪਰਖੋ।",
+    disclaimer: "ਇਹ ਮੁੱਢਲੀ ਯੋਗਤਾ ਜਾਣਕਾਰੀ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸਰਕਾਰੀ ਵੈੱਬਸਾਈਟ 'ਤੇ ਵੇਰਵੇ ਪਰਖੋ।",
   },
   ai: {
     placeholder: "ਫਸਲਾਂ, ਖੇਤੀ, ਮੰਡੀ ਭਾਅ ਬਾਰੇ ਪੁੱਛੋ…",
@@ -636,7 +689,13 @@ const pa: Dictionary = {
     error: "ਮਾਫ਼ ਕਰਨਾ, ਬੇਨਤੀ ਪੂਰੀ ਨਹੀਂ ਹੋ ਸਕੀ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
     title: "ਐਗਰੀਸੈਂਸ ਸਹਾਇਕ",
   },
-  common: { loading: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…", error: "ਗਲਤੀ ਹੋਈ", retry: "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼", viewAll: "ਸਭ ਵੇਖੋ", back: "ਵਾਪਸ" },
+  common: {
+    loading: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
+    error: "ਗਲਤੀ ਹੋਈ",
+    retry: "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼",
+    viewAll: "ਸਭ ਵੇਖੋ",
+    back: "ਵਾਪਸ",
+  },
 };
 
 const ur: Dictionary = {
@@ -689,7 +748,13 @@ const ur: Dictionary = {
     error: "معذرت، آپ کی درخواست مکمل نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
     title: "ایگری سینس معاون",
   },
-  common: { loading: "لوڈ ہو رہا ہے…", error: "خرابی ہوئی", retry: "دوبارہ کوشش", viewAll: "سب دیکھیں", back: "واپس" },
+  common: {
+    loading: "لوڈ ہو رہا ہے…",
+    error: "خرابی ہوئی",
+    retry: "دوبارہ کوشش",
+    viewAll: "سب دیکھیں",
+    back: "واپس",
+  },
 };
 
 export interface LanguageMeta {

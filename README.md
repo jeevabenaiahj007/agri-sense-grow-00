@@ -8,25 +8,25 @@ Role
 
 Act as a team consisting of:
 
- Senior AI Engineer
+Senior AI Engineer
 
- Machine Learning Engineer
+Machine Learning Engineer
 
- Full Stack Developer
+Full Stack Developer
 
- GIS & Remote Sensing Expert
+GIS & Remote Sensing Expert
 
- Agricultural Scientist
+Agricultural Scientist
 
- Soil Scientist
+Soil Scientist
 
- Climate Scientist
+Climate Scientist
 
- UI/UX Designer
+UI/UX Designer
 
- Database Architect
+Database Architect
 
- Data Visualization Expert
+Data Visualization Expert
 
 Design and build a complete production-ready web application.
 
@@ -34,33 +34,33 @@ Objective
 
 Develop an AI-powered agricultural decision support platform that recommends the most suitable crops for any selected location by analyzing:
 
- Temperature
+Temperature
 
- Humidity
+Humidity
 
- Rainfall
+Rainfall
 
- Air Moisture
+Air Moisture
 
- Soil Moisture
+Soil Moisture
 
- Soil Type
+Soil Type
 
- Soil pH
+Soil pH
 
- Soil Nutrients
+Soil Nutrients
 
- Pollution Levels
+Pollution Levels
 
- Wind Speed
+Wind Speed
 
- Elevation
+Elevation
 
- Climate Zone
+Climate Zone
 
- Sunlight Hours
+Sunlight Hours
 
- Seasonal Patterns
+Seasonal Patterns
 
 The system should analyze both current conditions and historical climate data to recommend crops with the highest expected success rate.
 
@@ -616,79 +616,79 @@ Accessible and intuitive interface
 
 Additional Innovative Features
 
- Satellite vegetation monitoring using NDVI imagery.
+Satellite vegetation monitoring using NDVI imagery.
 
- Farm boundary mapping.
+Farm boundary mapping.
 
- Seasonal crop calendar.
+Seasonal crop calendar.
 
- Alerts for extreme weather and pollution.
+Alerts for extreme weather and pollution.
 
- Multi-language support.
+Multi-language support.
 
- Voice input and voice responses.
+Voice input and voice responses.
 
- Offline mode with synchronization when internet becomes available.
+Offline mode with synchronization when internet becomes available.
 
- PDF report generation.
+PDF report generation.
 
- Excel and CSV export.
+Excel and CSV export.
 
- Recommendation history and comparison.
+Recommendation history and comparison.
 
- AI model performance dashboard for administrators.
+AI model performance dashboard for administrators.
 
- Explainable AI (XAI) showing the key factors behind each recommendation.
+Explainable AI (XAI) showing the key factors behind each recommendation.
 
 Expected Deliverables
 
 Generate:
 
- Complete project architecture.
+Complete project architecture.
 
- Database schema and ER diagram.
+Database schema and ER diagram.
 
- Backend API endpoints with documentation.
+Backend API endpoints with documentation.
 
- Frontend pages and components.
+Frontend pages and components.
 
- Machine learning pipeline.
+Machine learning pipeline.
 
- AI training workflow.
+AI training workflow.
 
- Folder structure.
+Folder structure.
 
- Authentication system.
+Authentication system.
 
- Responsive UI.
+Responsive UI.
 
- Production-ready code with comments.
+Production-ready code with comments.
 
- Testing strategy.
+Testing strategy.
 
- Deployment guide.
+Deployment guide.
 
- Sample datasets and seed data.
+Sample datasets and seed data.
 
- Installation instructions.
+Installation instructions.
 
- User documentation.
+User documentation.
 
 Innovation for Competitions
 
 To make this suitable for engineering innovation contests (such as MSME or hackathons), include these differentiators:
 
- Explainable AI so farmers understand why a crop is recommended.
+Explainable AI so farmers understand why a crop is recommended.
 
- Multi-factor recommendation combining weather, soil, air quality, satellite imagery, and market demand rather than relying on a single dataset.
+Multi-factor recommendation combining weather, soil, air quality, satellite imagery, and market demand rather than relying on a single dataset.
 
- Dynamic recommendations that update automatically as environmental conditions change.
+Dynamic recommendations that update automatically as environmental conditions change.
 
- Integration with IoT sensors for live farm monitoring.
+Integration with IoT sensors for live farm monitoring.
 
- Risk and profitability scoring to help farmers choose crops that balance yield, income, and sustainability.
+Risk and profitability scoring to help farmers choose crops that balance yield, income, and sustainability.
 
- Sustainability metrics (water use, soil health, carbon footprint) to encourage environmentally responsible farming.
+Sustainability metrics (water use, soil health, carbon footprint) to encourage environmentally responsible farming.
 
 This project was built with [Lovable](https://lovable.dev).
 

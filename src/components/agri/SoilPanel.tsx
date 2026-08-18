@@ -13,7 +13,6 @@ import {
 import { DataBadge } from "./DataBadge";
 import type { SoilProfile, SoilType } from "@/lib/agri/types";
 
-
 export const DEFAULT_SOIL: SoilProfile = {
   type: "loamy",
   ph: 6.8,
@@ -85,7 +84,6 @@ export function SoilPanel({ soil, onChange }: Props) {
     (k) => soil[k] === DEFAULT_SOIL[k],
   );
 
-
   return (
     <Card className="shadow-soft">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
@@ -124,7 +122,15 @@ export function SoilPanel({ soil, onChange }: Props) {
             </SelectContent>
           </Select>
         </div>
-        <Row label="pH" value={soil.ph} unit="" min={3.5} max={9.5} step={0.1} onChange={(ph) => set({ ph })} />
+        <Row
+          label="pH"
+          value={soil.ph}
+          unit=""
+          min={3.5}
+          max={9.5}
+          step={0.1}
+          onChange={(ph) => set({ ph })}
+        />
         <Row
           label="Nitrogen (N)"
           value={soil.nitrogen}
@@ -171,8 +177,8 @@ export function SoilPanel({ soil, onChange }: Props) {
           onChange={(salinity) => set({ salinity })}
         />
         <p className="text-xs text-muted-foreground">
-          No lab report? The defaults reflect a typical medium-fertility field. Adjust any value from
-          your soil health card for a sharper recommendation.
+          No lab report? The defaults reflect a typical medium-fertility field. Adjust any value
+          from your soil health card for a sharper recommendation.
         </p>
       </CardContent>
     </Card>

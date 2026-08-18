@@ -13,7 +13,9 @@ type OAuthResult = {
 };
 
 type OAuthApi = {
-  getAuthorizationDetails: (id: string) => Promise<{ data: OAuthResult | null; error: Error | null }>;
+  getAuthorizationDetails: (
+    id: string,
+  ) => Promise<{ data: OAuthResult | null; error: Error | null }>;
   approveAuthorization: (id: string) => Promise<{ data: OAuthResult | null; error: Error | null }>;
   denyAuthorization: (id: string) => Promise<{ data: OAuthResult | null; error: Error | null }>;
 };
@@ -25,7 +27,7 @@ function oauthApi(): OAuthApi {
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => ({
-    authorization_id: typeof s['authorization_id'] === "string" ? s['authorization_id'] : "",
+    authorization_id: typeof s["authorization_id"] === "string" ? s["authorization_id"] : "",
   }),
   beforeLoad: async ({ search, location }) => {
     if (!search.authorization_id) throw new Error("Missing authorization_id");
@@ -121,7 +123,12 @@ function Consent() {
             <Button className="flex-1" disabled={busy} onClick={() => decide(true)}>
               Approve
             </Button>
-            <Button className="flex-1" variant="outline" disabled={busy} onClick={() => decide(false)}>
+            <Button
+              className="flex-1"
+              variant="outline"
+              disabled={busy}
+              onClick={() => decide(false)}
+            >
               Cancel connection
             </Button>
           </div>

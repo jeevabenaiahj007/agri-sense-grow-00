@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { ChatWidget } from "@/components/agri/ChatWidget";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Analytics } from "@vercel/analytics/react";
 
 function NotFoundComponent() {
   return (
@@ -80,7 +81,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "AgriSense AI" },
-      { name: "description", content: "AI-powered crop recommendation and precision farming platform." },
+      {
+        name: "description",
+        content: "AI-powered crop recommendation and precision farming platform.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -105,8 +109,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "WebSite",
           name: "AgriSense AI",
           url: "https://agri-sense-grow-00.lovable.app",
-          description:
-            "AI-powered crop recommendation and precision farming platform.",
+          description: "AI-powered crop recommendation and precision farming platform.",
         }),
       },
       {
@@ -151,6 +154,7 @@ function RootComponent() {
       <Outlet />
       <ChatWidget />
       <Toaster richColors position="top-center" />
+      <Analytics />
     </QueryClientProvider>
   );
 }

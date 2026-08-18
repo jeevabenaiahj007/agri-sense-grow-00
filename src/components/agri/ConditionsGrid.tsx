@@ -7,16 +7,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import {
-  CloudRain,
-  Droplets,
-  Gauge,
-  Leaf,
-  Mountain,
-  Sun,
-  Thermometer,
-  Wind,
-} from "lucide-react";
+import { CloudRain, Droplets, Gauge, Leaf, Mountain, Sun, Thermometer, Wind } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -82,59 +73,58 @@ export function ConditionsGrid({ site }: { site: SiteConditions }) {
           label="Temperature"
           value={`${site.temperature.toFixed(1)}°C`}
           sub={`Soil ${site.soilTemperature.toFixed(1)}°C`}
-          prov={pv['temperature']}
+          prov={pv["temperature"]}
         />
         <Metric
           icon={Droplets}
           label="Humidity"
           value={`${site.humidity.toFixed(0)}%`}
           sub={`Cloud ${site.cloudCover.toFixed(0)}%`}
-          prov={pv['humidity']}
+          prov={pv["humidity"]}
         />
         <Metric
           icon={CloudRain}
           label="Rainfall"
           value={`${Math.round(site.rainfallAnnual)} mm/yr`}
           sub={`${Math.round(site.rainfall30d)} mm last 30 days`}
-          prov={pv['rainfallAnnual']}
+          prov={pv["rainfallAnnual"]}
         />
         <Metric
           icon={Wind}
           label="Wind"
           value={`${site.windSpeed.toFixed(0)} km/h`}
           sub={`Pressure ${site.pressure.toFixed(0)} hPa`}
-          prov={pv['windSpeed']}
+          prov={pv["windSpeed"]}
         />
         <Metric
           icon={Sun}
           label="Sunshine"
           value={`${site.sunshineHours.toFixed(1)} h/day`}
           sub={`UV index ${site.uvIndex.toFixed(1)}`}
-          prov={pv['sunshineHours']}
+          prov={pv["sunshineHours"]}
         />
         <Metric
           icon={Leaf}
           label="Soil moisture"
           value={`${(site.soilMoisture * 100).toFixed(0)}%`}
           sub="Volumetric, 0–1 cm"
-          prov={pv['soilMoisture']}
+          prov={pv["soilMoisture"]}
         />
         <Metric
           icon={Mountain}
           label="Elevation"
           value={`${Math.round(site.elevation)} m`}
           sub={site.climateZone}
-          prov={pv['elevation']}
+          prov={pv["elevation"]}
         />
         <Metric
           icon={Gauge}
           label="Season"
           value={site.season}
           sub={`Lat ${site.latitude.toFixed(2)}°`}
-          prov={pv['season']}
+          prov={pv["season"]}
         />
       </div>
-
 
       <div className="grid gap-4 lg:grid-cols-5">
         <Card className="shadow-soft lg:col-span-3">
@@ -169,7 +159,7 @@ export function ConditionsGrid({ site }: { site: SiteConditions }) {
             <CardTitle className="flex items-center justify-between gap-2 text-base">
               <span className="flex items-center gap-2">
                 Air quality
-                {pv['airQuality'] && <DataBadge prov={pv['airQuality']} />}
+                {pv["airQuality"] && <DataBadge prov={pv["airQuality"]} />}
               </span>
               <Badge className={band.tone} variant="secondary">
                 AQI {Math.round(site.aqi)} · {band.label}
