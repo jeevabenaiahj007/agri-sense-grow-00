@@ -120,9 +120,9 @@ function CropImportPage() {
           <p className="text-xs text-muted-foreground">
             CSV columns: id, scientificName, kharif, rabi, zaid, tempMin, tempMax, rainfallOptimal,
             phOptimal, organicMatterReq, ecTolerance, soilTexturePref, waterRequirement,
-            sowingWindow, harvestWindow, droughtTolerance, salinityTolerance,
-            waterloggingTolerance. JSON accepts the same fields as an array of objects (with a
-            nested <code>seasons</code> object and <code>tempOptimal</code> as [min, max]).
+            sowingWindow, harvestWindow, droughtTolerance, salinityTolerance, waterloggingTolerance.
+            JSON accepts the same fields as an array of objects (with a nested <code>seasons</code>{" "}
+            object and <code>tempOptimal</code> as [min, max]).
           </p>
           <p className="text-xs text-muted-foreground">
             {savedCount > 0

@@ -143,14 +143,19 @@ function validateRows(rows: unknown[], format: "csv" | "json", offset: number): 
 
 export function parseProfileFile(text: string, fileName: string): ParseResult {
   const trimmed = text.trim();
-  const isJson = fileName.toLowerCase().endsWith(".json") || trimmed.startsWith("[") || trimmed.startsWith("{");
+  const isJson =
+    fileName.toLowerCase().endsWith(".json") || trimmed.startsWith("[") || trimmed.startsWith("{");
 
   if (isJson) {
     let data: unknown;
     try {
       data = JSON.parse(trimmed);
     } catch (e) {
-      return { valid: [], errors: [{ row: 0, id: "—", message: `Invalid JSON: ${(e as Error).message}` }], format: "json" };
+      return {
+        valid: [],
+        errors: [{ row: 0, id: "—", message: `Invalid JSON: ${(e as Error).message}` }],
+        format: "json",
+      };
     }
     const rows = Array.isArray(data) ? data : [data];
     return validateRows(rows, "json", 1);
@@ -158,7 +163,11 @@ export function parseProfileFile(text: string, fileName: string): ParseResult {
 
   const lines = trimmed.split(/\r?\n/).filter((l) => l.trim());
   if (lines.length < 2) {
-    return { valid: [], errors: [{ row: 0, id: "—", message: "CSV needs a header row and at least one data row" }], format: "csv" };
+    return {
+      valid: [],
+      errors: [{ row: 0, id: "—", message: "CSV needs a header row and at least one data row" }],
+      format: "csv",
+    };
   }
   const headers = splitCsvLine(lines[0]!);
   const missing = CSV_TEMPLATE_HEADERS.filter((h) => !headers.includes(h));

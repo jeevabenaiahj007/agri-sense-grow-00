@@ -49,7 +49,13 @@ function Dashboard() {
   const [selected, setSelected] = useState<Recommendation | null>(null);
   const [dark, setDark] = useState(false);
 
-  const { data: site, isLoading, isError, refetch, isFetching } = useQuery({
+  const {
+    data: site,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["site", place.latitude, place.longitude],
     queryFn: () => fetchSiteConditions(place),
     staleTime: 10 * 60 * 1000,
@@ -119,7 +125,11 @@ function Dashboard() {
               </p>
             </div>
             <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
-              {isFetching ? <Loader2 className="size-4 animate-spin" /> : <Leaf className="size-4" />}
+              {isFetching ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Leaf className="size-4" />
+              )}
               Refresh conditions
             </Button>
           </div>
@@ -149,8 +159,8 @@ function Dashboard() {
               <div>
                 <h2 className="font-display text-xl font-semibold">Top 10 recommended crops</h2>
                 <p className="text-sm text-muted-foreground">
-                  Ranked by a weighted multi-factor model over climate, soil, season, air quality and
-                  economics. Open any crop to see exactly why it scored the way it did.
+                  Ranked by a weighted multi-factor model over climate, soil, season, air quality
+                  and economics. Open any crop to see exactly why it scored the way it did.
                 </p>
               </div>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -190,8 +200,11 @@ function Dashboard() {
         </p>
       </footer>
 
-
-      <CropDetail rec={selected} site={site ?? null} onOpenChange={(o) => !o && setSelected(null)} />
+      <CropDetail
+        rec={selected}
+        site={site ?? null}
+        onOpenChange={(o) => !o && setSelected(null)}
+      />
     </div>
   );
 }

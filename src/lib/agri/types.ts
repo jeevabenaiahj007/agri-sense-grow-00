@@ -1,12 +1,5 @@
 export type SoilType =
-  | "sandy"
-  | "loamy"
-  | "clay"
-  | "silt"
-  | "black"
-  | "red"
-  | "laterite"
-  | "alluvial";
+  "sandy" | "loamy" | "clay" | "silt" | "black" | "red" | "laterite" | "alluvial";
 
 /** Where a data point came from — shown to the user for every reading. */
 export type DataSourceType =
@@ -61,7 +54,6 @@ export interface SoilProfile {
   salinity: number; // dS/m
 }
 
-
 export interface SiteConditions {
   name: string;
   latitude: number;
@@ -90,7 +82,6 @@ export interface SiteConditions {
   monthlyRain: { month: string; rain: number }[];
   /** Per-metric data provenance, keyed by metric id (e.g. "temperature"). */
   provenance: Record<string, Provenance>;
-
 }
 
 export interface Crop {
@@ -118,7 +109,13 @@ export interface Crop {
   carbonPerHa: number; // tCO2e
   nitrogenFixing: boolean;
   plantingMonths: number[];
-  diseases: { name: string; trigger: string; symptoms: string; prevention: string; treatment: string }[];
+  diseases: {
+    name: string;
+    trigger: string;
+    symptoms: string;
+    prevention: string;
+    treatment: string;
+  }[];
   pests: string[];
   rotateAfter: string[];
   rotateBefore: string[];
@@ -152,7 +149,13 @@ export interface Recommendation {
     soilHealth: number;
     eco: number;
   };
-  diseaseRisks: { name: string; probability: number; symptoms: string; prevention: string; treatment: string }[];
+  diseaseRisks: {
+    name: string;
+    probability: number;
+    symptoms: string;
+    prevention: string;
+    treatment: string;
+  }[];
   fertilizer: { organic: string; chemical: string; micro: string; schedule: string[] };
   plantingMonth: string;
   harvestMonth: string;
