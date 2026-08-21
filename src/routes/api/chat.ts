@@ -11,7 +11,7 @@ Recommendations are advisory — remind users to validate with a local extension
 type Msg = { role: "user" | "assistant"; content: string };
 type Incoming = { messages?: Msg[] };
 
-const GEMINI_MODEL = "gemini-3.5-flash";
+const GEMINI_MODEL = "gemini-3.6-flash";
 
 async function askGemini(key: string, history: Msg[]) {
   const res = await fetch(
